@@ -1,80 +1,90 @@
 <template>
-    <div class="match-tab">
-        <section class="filter-matches" v-show="active==0">
-            <div class="vux-tab-wrap match-tab">
-                <div class="vux-tab-container">
-                    <div class="vux-tab">
-                        <div class="vux-tab-item" style="border: none;color:rgb(255, 255, 255);">
-                            今日
-                            <span class="match-number">63
-            </span></div>
-                        <span class="column-line"></span>
-                        <div class="vux-tab-item vux-tab-selected"
-                             style="border: none; color: rgb(186, 206, 241);">
-                            滚盘
-                            <span class="match-number">1
-            </span></div>
-                        <span class="column-line"></span>
-                        <div class="vux-tab-item" style="border: none; color: rgb(186, 206, 241);">
-                            赛前
-                            <span class="match-number">58
-            </span></div>
-                        <span class="column-line"></span>
-                        <div class="vux-tab-item" style="border: none; color: rgb(186, 206, 241);">
-                            已结束
-                        </div>
-                        <span class="column-line"></span>
-                        <div  class="vux-tab-ink-bar vux-tab-ink-bar-transition-forward"
-                             style="display: block; height: 22px; background-color: transparent; left: 0%; right: 75%;">
-                        </div>
-                    </div>
-                </div>
-                <!--                <div class="vux-tab-ink-bar vux-tab-ink-bar-transition-forward" style="display: block; height: 22px; background-color: transparent; left: 50%; right: 25%;">&lt;!&ndash;&ndash;&gt;</div>-->
+    <section class="match-info">
+        <div class="home-notice">
+            <div class="notice-icon"></div>
+            <div class="vux-marquee" >
+                <ul class="vux-marquee-box" ref="notice"
+                    :style="'transform: translate3d(0px, '+bottom+'px, 0px); transition: transform 300ms ease 0s;'">
+                    <li class="notice-item">
+                        <div>DOTA2 BTS职业系列赛 - 美洲 Evil Geniuses - VS - Cloud9 赛事改期</div>
+                    </li>
+                    <li class="notice-item">
+                        <div>英雄联盟 TCL Academy冬季赛 GALA - VS - SUPA 赛事结束</div>
+                    </li>
+                    <li class="notice-item">
+                        <div>英雄联盟 TCL Academy冬季赛 5RA - VS - AURA 赛事结束</div>
+                    </li>
+                    <li class="notice-item">
+                        <div>英雄联盟 TCL Academy冬季赛 FBA - VS - DPA 赛事结束</div>
+                    </li>
+                    <li class="notice-item">
+                        <div>英雄联盟 TCL Academy冬季赛 BJKA - VS - IWA 赛事结束</div>
+                    </li>
+                    <li class="notice-item">
+                        <div>雷竞技官方网址</div>
+                    </li>
+                    <li class="notice-item">
+                        <div>英雄联盟玩法说明</div>
+                    </li>
+                    <li class="notice-item">
+                        <div>支付宝吱口令存款须知</div>
+                    </li>
+                    <li class="notice-item">
+                        <div>玩法说明: CSGO 是/否 单选手单回合击杀3敌人(第NX至NY回合)</div>
+                    </li>
+                    <li class="notice-item">
+                        <div>下载雷竞技APP请通过官方提供链接下载</div>
+                    </li>
+                    <li class="notice-item">
+                        <div>【请务必阅读】重要提示</div>
+                    </li>
+                    <li class="notice-item">
+                        <div>投注盘口显示 $T1 $T2</div>
+                    </li>
+                    <li class="notice-item">
+                        <div>【请务必阅读】网银支付：重要提示</div>
+                    </li>
+                    <li class="notice-item">
+                        <div>【存款前须知】- 请务必阅读</div>
+                    </li>
+                    <li class="notice-item">
+                        <div>请注意：投注遇到网路延迟【点击阅读详情】</div>
+                    </li>
+                    <li class="notice-item">
+                        <div>DOTA2 BTS职业系列赛 - 美洲 Evil Geniuses - VS - Cloud9 赛事改期</div>
+                    </li>
+                </ul>
             </div>
-            <div class="show-filter-games-btn" @click="childActive(1)"></div>
-        </section>
-        <collapse-transition>
-            <section class="filter-games" v-show="active==1">
-                <div class="hide-filter-games-btn" style="visibility: hidden;">&nbsp;&nbsp;
-                </div>
-                <div>游戏筛选</div>
-                <div class="hide-filter-games-btn">
-                    <div class="btn-content" @click="childActive(0)">✓</div>
-                </div>
-            </section>
-        </collapse-transition>
-
-
-    </div>
-
+        </div>
+    </section>
 </template>
 
 <script>
-    import CollapseTransition from '@/utils/collapse-transition'; // 本人将collapse-transition.js 放置在工具类utils文件夹
     export default {
         name: "match-info",
-        props: {
-            // 显示
-            active: {
-                type: [Number,String],
-            },
-        },
         data() {
-            return {}
-        },
-        methods: {//条用方法
-            childActive(value){
-                this.$emit('fatherActive',value);
+            return {
+                bottom:0,
             }
         },
+        methods: {//条用方法
+        },
         mounted() {//加载完毕后
+            const _this =this;
+            setInterval(function () {
+              const  Height = _this.$refs.notice.offsetHeight;
+              if(Math.abs(_this.bottom)===Height){
+                  _this.bottom = 0;
+              }else {
+                  _this.bottom = _this.bottom - 34;
+              }
+            }, 3000);
         },
         beforeCreate() {//初始化前
         },
         updated() {//更新数据
         },
         components: {//注册组件
-            'collapse-transition': CollapseTransition,
         },
         watch: {
             //data(val, newval) {
@@ -86,165 +96,59 @@
 </script>
 
 <style scoped>
-    .match-tab {
-        position: relative;
-        top: 0;
-        left: 0;
-        z-index: 4;
-        overflow: hidden;
-        width: 100%;
-        height: 44px;
-        background-color: #090c15;
-        border-bottom: 1px solid #182031;
-    }
-
-    .match-tab .filter-matches {
-        display: -ms-flexbox;
-        display: flex;
-    }
-
-    .match-tab .filter-matches .match-tab {
-        width: calc(100% - 50px);
-    }
-
-    .vux-tab-wrap {
-        position: relative;
-        padding-top: 44px;
-    }
-
-    .vux-tab-container {
-        height: 44px;
-        top: 0;
-        left: 0;
-        right: 0;
-        overflow: hidden;
-        position: absolute;
-    }
-
-    .match-tab .vux-tab {
-        background-color: transparent;
-        height: 43px;
-    }
-
-    .vux-tab {
-        background-color: transparent;
-        height: 43px !important;
-    }
-
-    .vux-tab {
-        display: -ms-flexbox;
-        display: flex;
-        background-color: #fff;
-        height: 44px;
-        position: relative;
-    }
-
-
-    .vux-tab .vux-tab-item {
-        display: block;
-        -ms-flex: 1;
-        flex: 1;
-        width: 100%;
-        height: 100%;
-        box-sizing: border-box;
-        background: linear-gradient(180deg, #e5e5e5, #e5e5e5, hsla(0, 0%, 90%, 0)) 0 100% no-repeat;
-        background-size: 100% 1px;
-        font-size: 14px;
-        text-align: center;
-        line-height: 44px;
-        color: #666;
-    }
-
-    .vux-tab .vux-tab-item.vux-tab-selected {
-        color: #04be02;
-        border-bottom: 3px solid #04be02;
-    }
-
-    .match-tab .filter-matches .vux-tab-item {
-        background: #090c15;
-        font-size: 13.5px;
-    }
-
-    .match-tab .filter-matches .match-number {
-        font-size: 12.5px;
-        color: #758bb5;
-    }
-
-    .match-tab .filter-matches .column-line {
-        width: 1px;
-        background: hsla(218, 4%, 48%, .3);
-        height: 20px;
-        margin-top: 13px;
-    }
-
-    .match-tab .filter-matches .show-filter-games-btn {
-        background-position: 50%;
-        background-repeat: no-repeat;
-        width: 50px;
-        height: 44px;
-        background-image: url('../assets/images/svg/games.svg');
-    }
-
-    .match-tab .vux-tab-ink-bar {
-        background-color: transparent;
-        height: 44px;
-        background-repeat: no-repeat;
-        background-image: url('../assets/images/svg/ink-bar.svg');
-        background-position: 50%;
-    }
-
-    .vux-tab-ink-bar-transition-forward {
-        transition: right .3s cubic-bezier(.35, 0, .25, 1), left .3s cubic-bezier(.35, 0, .25, 1) .09s;
-    }
-
-    .vux-tab-ink-bar {
-        position: absolute;
-        height: 2px;
-        bottom: 0;
-        left: 0;
-        background-color: #04be02;
-        text-align: center;
-    }
-
-
-
-    /*游戏列表*/
-
-    .match-tab .filter-games {
-        width: 100%;
-        height: 43px;
-        padding-right: 8px;
-        padding-left: 8px;
-        display: -ms-flexbox;
-        display: flex;
-        -ms-flex-pack: justify;
-        justify-content: space-between;
-        -ms-flex-align: center;
-        align-items: center;
-        background-color: #090c15;
-        font-size: 1.3rem;
-    }
-    .match-tab .filter-games .hide-filter-games-btn .btn-content, .match-tab .filter-games .hide-filter-games-btn {
-        border-radius: 2px;
+    .home-page .match-info {
+        margin-left: 8px;
+        margin-right: 8px;
+        height: 40px;
         display: -ms-flexbox;
         display: flex;
         -ms-flex-pack: center;
         justify-content: center;
         -ms-flex-align: center;
         align-items: center;
+        background: #0c121f;
+        border-bottom: 1px solid #182031;
+        font-size: 1.2rem;
+        color: #00befe
     }
-    .match-tab .filter-games .hide-filter-games-btn {
-        width: 48px;
-        height: 20.001px;
-        background: linear-gradient(90deg,#0689f3,#019bbd);
-    }
-
-
-    .match-tab .filter-games .hide-filter-games-btn .btn-content {
-        width: calc(100% - 2px);
-        height: 18px;
-        background: #151b29;
-        color: #1ee8e7;
+    .home-page .match-info .home-notice {
+        width: 100%;
+        margin-right: auto;
     }
 
+    .home-page .match-info .home-notice .notice-icon {
+        background-position: 50%;
+        background-repeat: no-repeat;
+        width: 22px;
+        height: 22px;
+        margin-left: 16px;
+        margin-right: 8px;
+        background-image: url('../assets/images/svg/notice.svg');
+    }
+    .vux-marquee {
+        height: 34px;
+        width: 100%;
+        overflow: hidden;
+    }
+    .vux-marquee-box, .vux-marquee-box li {
+        margin: 0;
+        width: 100%;
+    }
+    .vux-marquee-box {
+        padding: 0;
+        height: auto;
+    }
+    .home-page .match-info .home-notice .notice-item, .home-page .match-info .home-notice {
+        height: 34px;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+    .home-page .match-info .home-notice .notice-item {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        padding-right: 16px
+    }
 </style>

@@ -14,6 +14,10 @@ const api = {
     //赔率
     odds:'v1/odds',
     //历史开奖数据
-    history:'v1/history'
+    history:'v1/history',
+    //游戏list表
+    game:'v1/game',
+    //游戏list表
+    match:'v1/match',
 };
 export default api

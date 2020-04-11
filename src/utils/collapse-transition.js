@@ -1,5 +1,5 @@
 // collapse-transition.js
-const transitionStyle = '0.3s height ease-in-out';
+const transitionStyle = '0.5s height ease-in-out';
 const Transition = {
     beforeEnter(el) {
         el.style.transition = transitionStyle;
