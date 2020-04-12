@@ -130,7 +130,44 @@
             },
             momentDiff2(time){
                 return  moment(time).diff(moment());
+            },
+
+            matchZl(value){
+                console.log(typeof value);
+
+                const bo = new Array();
+
+
+
+                for (var i in value) {
+                    console.log('键名：', i);
+                    console.log('键值：', value[i]);
+
+                    for (var t in value[i]['odds']) {
+                        console.log('键名：', t);
+                        console.log('键值：', value[i]['odds'][t]);
+                        if(bo.indexOf(value[i]['odds'][t]['match_stage'])){
+                            console.log('不存在');
+                            bo.push(value[i]['odds'][t]['match_stage']);
+                            console.log('不存在');
+                            console.log(bo);
+                        }
+
+
+                    }
+
+
+
+                }
+            //    odds[match_stage['全天']][sort_index][]
+            //     value.forEach(function(e){
+            //
+            //     });
+
+
             }
+
+
 
         },
         mounted() {//加载完毕后
@@ -169,9 +206,10 @@
                     if(pos.y > 50){
                         setTimeout(()=>{
                             _this.$get(_this.$api.match).then((res)=>{
-                                console.log(res);
+                                // console.log(res);
                                 //刷新数据
-                                _this.match = res.datas;
+                                _this.matchZl(res.datas);
+                                // _this.match = _this.matchZl(res.datas);
                                 // console.log(moment(_this.match[0]['start_time']).diff(moment()));
                                 //恢复刷新提示文本值
                                 _this.pulldownMsg = '下拉刷新';
