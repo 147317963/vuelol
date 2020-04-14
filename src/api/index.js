@@ -19,5 +19,7 @@ const api = {
     game:'v1/game',
     //游戏list表
     match:'v1/match',
+    //公告
+    announcement:'v1/announcement',
 };
 export default api

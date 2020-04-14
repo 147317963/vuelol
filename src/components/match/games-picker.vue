@@ -2,9 +2,8 @@
 <!--    <collapse-transition>-->
     <transition mode="out-in" enter-active-class="animated fadeInDown" leave-active-class="animated fadeOutUp">
         <div class="vux-popup-dialog games-picker vux-popup-top vux-popup-show" v-show="this.$store.state.gameListShow===1" ref="scroll">
-
             <div  class="vux-checker-box checker-content">
-                <div  class="default-checker-item selected-checker-item" @click="">
+                <div  class="default-checker-item selected-checker-item">
                     <div  style="height: 2px;">&nbsp;</div>
                     <div  class="games-info">
                         <div  class="games-icon all-games-icon"></div>
@@ -23,177 +22,6 @@
                     <div  class="selected-checker-light"></div>
                 </div>
 
-<!--                <div  class="vux-checker-item vux-tap-active default-checker-item selected-all-games">-->
-<!--                    <div  style="height: 2px;">&nbsp;</div>-->
-<!--                    <div  class="games-info"><img  alt="" class="games-icon"-->
-<!--                                                                    src="//www.nmgdjkj.com//file/60d062143c4cc70ac9e36e3e61c372f1.svg"-->
-<!--                                                                    lazy="loaded">-->
-<!--                        <div >DOTA2</div>-->
-<!--                    </div>-->
-<!--                    <div  class="selected-checker-light"></div>-->
-<!--                </div>-->
-<!--                <div  class="vux-checker-item vux-tap-active default-checker-item selected-all-games">-->
-<!--                    <div  style="height: 2px;">&nbsp;</div>-->
-<!--                    <div  class="games-info"><img  alt="" class="games-icon"-->
-<!--                                                                    src="//www.nmgdjkj.com//file/e6edb8165fc906c02ed6dc74dafb1702.svg"-->
-<!--                                                                    lazy="loaded">-->
-<!--                        <div >CSGO</div>-->
-<!--                    </div>-->
-<!--                    <div  class="selected-checker-light"></div>-->
-<!--                </div>-->
-<!--                <div  class="vux-checker-item vux-tap-active default-checker-item selected-all-games">-->
-<!--                    <div  style="height: 2px;">&nbsp;</div>-->
-<!--                    <div  class="games-info"><img  alt="" class="games-icon"-->
-<!--                                                                    src="//www.nmgdjkj.com//file/4a920eed6bc2bef7862e0a51fe469ff4.svg"-->
-<!--                                                                    lazy="loaded">-->
-<!--                        <div >英雄联盟</div>-->
-<!--                    </div>-->
-<!--                    <div  class="selected-checker-light"></div>-->
-<!--                </div>-->
-<!--                <div  class="vux-checker-item vux-tap-active default-checker-item selected-all-games">-->
-<!--                    <div  style="height: 2px;">&nbsp;</div>-->
-<!--                    <div  class="games-info"><img  alt="" class="games-icon"-->
-<!--                                                                    src="//www.nmgdjkj.com//file/5155ce2645f2486533bd28f9e9c2026e.svg"-->
-<!--                                                                    lazy="loaded">-->
-<!--                        <div >王者荣耀</div>-->
-<!--                    </div>-->
-<!--                    <div  class="selected-checker-light"></div>-->
-<!--                </div>-->
-<!--                <div  class="vux-checker-item vux-tap-active default-checker-item selected-all-games">-->
-<!--                    <div  style="height: 2px;">&nbsp;</div>-->
-<!--                    <div  class="games-info"><img  alt="" class="games-icon"-->
-<!--                                                                    src="//www.nmgdjkj.com//file/f299629fdf01bfb98c7b2686700c9cd7.svg"-->
-<!--                                                                    lazy="loaded">-->
-<!--                        <div >篮球</div>-->
-<!--                    </div>-->
-<!--                    <div  class="selected-checker-light"></div>-->
-<!--                </div>-->
-<!--                <div  class="vux-checker-item vux-tap-active default-checker-item selected-all-games">-->
-<!--                    <div  style="height: 2px;">&nbsp;</div>-->
-<!--                    <div  class="games-info"><img  alt="" class="games-icon"-->
-<!--                                                                    src="//www.nmgdjkj.com//file/896b863382a913294251a6daadcaaab9.svg"-->
-<!--                                                                    lazy="loaded">-->
-<!--                        <div >足球</div>-->
-<!--                    </div>-->
-<!--                    <div  class="selected-checker-light"></div>-->
-<!--                </div>-->
-<!--                <div  class="vux-checker-item vux-tap-active default-checker-item selected-all-games">-->
-<!--                    <div  style="height: 2px;">&nbsp;</div>-->
-<!--                    <div  class="games-info"><img  alt="" class="games-icon"-->
-<!--                                                                    src="//www.nmgdjkj.com//file/2e5d8e1b2e333b233d8d4063a7d4300e.svg"-->
-<!--                                                                    lazy="loaded">-->
-<!--                        <div >MMA</div>-->
-<!--                    </div>-->
-<!--                    <div  class="selected-checker-light"></div>-->
-<!--                </div>-->
-<!--                <div  class="vux-checker-item vux-tap-active default-checker-item selected-all-games">-->
-<!--                    <div  style="height: 2px;">&nbsp;</div>-->
-<!--                    <div  class="games-info"><img  alt="" class="games-icon"-->
-<!--                                                                    src="//www.nmgdjkj.com//file/10039ea1b2c720e26f0c0a5fdd8e8ae1.svg"-->
-<!--                                                                    lazy="loaded">-->
-<!--                        <div >穿越火线</div>-->
-<!--                    </div>-->
-<!--                    <div  class="selected-checker-light"></div>-->
-<!--                </div>-->
-<!--                <div  class="vux-checker-item vux-tap-active default-checker-item selected-all-games">-->
-<!--                    <div  style="height: 2px;">&nbsp;</div>-->
-<!--                    <div  class="games-info"><img  alt="" class="games-icon"-->
-<!--                                                                    src="//www.nmgdjkj.com//file/c30a43b86ebd99d76c3652234befce15.svg"-->
-<!--                                                                    lazy="loaded">-->
-<!--                        <div >守望先锋</div>-->
-<!--                    </div>-->
-<!--                    <div  class="selected-checker-light"></div>-->
-<!--                </div>-->
-<!--                <div  class="vux-checker-item vux-tap-active default-checker-item selected-all-games">-->
-<!--                    <div  style="height: 2px;">&nbsp;</div>-->
-<!--                    <div  class="games-info"><img  alt="" class="games-icon"-->
-<!--                                                                    src="//www.nmgdjkj.com//file/f0abdb1c6d408973875bf17f8015b335.svg"-->
-<!--                                                                    lazy="loaded">-->
-<!--                        <div >星际争霸II</div>-->
-<!--                    </div>-->
-<!--                    <div  class="selected-checker-light"></div>-->
-<!--                </div>-->
-<!--                <div  class="vux-checker-item vux-tap-active default-checker-item selected-all-games">-->
-<!--                    <div  style="height: 2px;">&nbsp;</div>-->
-<!--                    <div  class="games-info"><img  alt="" class="games-icon"-->
-<!--                                                                    src="//www.nmgdjkj.com//file/adb213d45ff762a6c9d9d5bb5bd7be4b.svg"-->
-<!--                                                                    lazy="loaded">-->
-<!--                        <div >火箭联盟</div>-->
-<!--                    </div>-->
-<!--                    <div  class="selected-checker-light"></div>-->
-<!--                </div>-->
-<!--                <div  class="vux-checker-item vux-tap-active default-checker-item selected-all-games">-->
-<!--                    <div  style="height: 2px;">&nbsp;</div>-->
-<!--                    <div  class="games-info"><img  alt="" class="games-icon"-->
-<!--                                                                    src="//www.nmgdjkj.com//file/8561a708439fcee7e401900170a7f539.svg"-->
-<!--                                                                    lazy="loaded">-->
-<!--                        <div >彩虹六号</div>-->
-<!--                    </div>-->
-<!--                    <div  class="selected-checker-light"></div>-->
-<!--                </div>-->
-<!--                <div  class="vux-checker-item vux-tap-active default-checker-item selected-all-games">-->
-<!--                    <div  style="height: 2px;">&nbsp;</div>-->
-<!--                    <div  class="games-info"><img  alt="" class="games-icon"-->
-<!--                                                                    src="//www.nmgdjkj.com//file/4fbea59631b613e64626584e0284190a.svg"-->
-<!--                                                                    lazy="loaded">-->
-<!--                        <div >炉石传说</div>-->
-<!--                    </div>-->
-<!--                    <div  class="selected-checker-light"></div>-->
-<!--                </div>-->
-<!--                <div  class="vux-checker-item vux-tap-active default-checker-item selected-all-games">-->
-<!--                    <div  style="height: 2px;">&nbsp;</div>-->
-<!--                    <div  class="games-info"><img  alt="" class="games-icon"-->
-<!--                                                                    src="//www.nmgdjkj.com//file/231c6a2bf90dc1fad0fc427aeb33eafd.svg"-->
-<!--                                                                    lazy="loaded">-->
-<!--                        <div >NBA2K</div>-->
-<!--                    </div>-->
-<!--                    <div  class="selected-checker-light"></div>-->
-<!--                </div>-->
-<!--                <div  class="vux-checker-item vux-tap-active default-checker-item selected-all-games">-->
-<!--                    <div  style="height: 2px;">&nbsp;</div>-->
-<!--                    <div  class="games-info"><img  alt="" class="games-icon"-->
-<!--                                                                    src="//www.nmgdjkj.com//file/bc89fb93ee7b515a276595f9fa211759.svg"-->
-<!--                                                                    lazy="loaded">-->
-<!--                        <div >FIFA</div>-->
-<!--                    </div>-->
-<!--                    <div  class="selected-checker-light"></div>-->
-<!--                </div>-->
-<!--                <div  class="vux-checker-item vux-tap-active default-checker-item selected-all-games">-->
-<!--                    <div  style="height: 2px;">&nbsp;</div>-->
-<!--                    <div  class="games-info"><img  alt="" class="games-icon"-->
-<!--                                                                    src="//www.nmgdjkj.com//file/aeeadb46cb94334ff0bd693b5e8fd3a6.svg"-->
-<!--                                                                    lazy="loaded">-->
-<!--                        <div >实况足球</div>-->
-<!--                    </div>-->
-<!--                    <div  class="selected-checker-light"></div>-->
-<!--                </div>-->
-<!--                <div  class="vux-checker-item vux-tap-active default-checker-item selected-all-games">-->
-<!--                    <div  style="height: 2px;">&nbsp;</div>-->
-<!--                    <div  class="games-info"><img  alt="" class="games-icon"-->
-<!--                                                                    src="//www.nmgdjkj.com//file/829a498b4f4abcc0163c5d2f1837f8d9.svg"-->
-<!--                                                                    lazy="loaded">-->
-<!--                        <div >使命召唤</div>-->
-<!--                    </div>-->
-<!--                    <div  class="selected-checker-light"></div>-->
-<!--                </div>-->
-<!--                <div  class="vux-checker-item vux-tap-active default-checker-item selected-all-games">-->
-<!--                    <div  style="height: 2px;">&nbsp;</div>-->
-<!--                    <div  class="games-info"><img  alt="" class="games-icon"-->
-<!--                                                                    src="//www.nmgdjkj.com//file/7184f7a8546e31e6b50f227964d6b4b9.svg"-->
-<!--                                                                    lazy="loaded">-->
-<!--                        <div >绝地求生</div>-->
-<!--                    </div>-->
-<!--                    <div  class="selected-checker-light"></div>-->
-<!--                </div>-->
-<!--                <div  class="vux-checker-item vux-tap-active default-checker-item selected-all-games">-->
-<!--                    <div  style="height: 2px;">&nbsp;</div>-->
-<!--                    <div  class="games-info"><img  alt="" class="games-icon"-->
-<!--                                                                    src="//www.nmgdjkj.com//file/6760b72f17ddb2801f99d3467a489ae8.svg"-->
-<!--                                                                    lazy="loaded">-->
-<!--                        <div >魔兽争霸3</div>-->
-<!--                    </div>-->
-<!--                    <div  class="selected-checker-light"></div>-->
-<!--                </div>-->
             </div>
         </div>
     </transition>
@@ -252,8 +80,8 @@
 
         },
         mounted() {//加载完毕后
-
             this.getGameList();
+
         },
         beforeCreate() {//初始化前
         },
@@ -281,6 +109,7 @@
 </script>
 
 <style scoped>
+
 
     .vux-popup-dialog {
         position: fixed;

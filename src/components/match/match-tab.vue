@@ -7,12 +7,12 @@
                     <div class="vux-tab">
                         <div class="vux-tab-item" style="border: none;color:rgb(255, 255, 255);" @click.stop="styleObject(0)">
                             今日
-                            <span class="match-number">63</span>
+                            <span class="match-number">{{today}}</span>
                         </div>
                         <span class="column-line"></span>
                         <div class="vux-tab-item vux-tab-selected" style="border: none; color: rgb(186, 206, 241);" @click.stop="styleObject(1)">
                             滚盘
-                            <span class="match-number">1</span>
+                            <span class="match-number">{{rolling}}</span>
                         </div>
                         <span class="column-line"></span>
                         <div class="vux-tab-item" style="border: none; color: rgb(186, 206, 241);" @click.stop="styleObject(2)" >
@@ -58,6 +58,9 @@
             return {
                 left:0,
                 right:75,
+                today:0,
+                rolling:0,
+
 
 
             }
@@ -87,6 +90,7 @@
             // this.options = _.remove(options, function(n) {
             //     return n % 2 == 0;
             // });
+            this.$store.state.match
         },
         beforeCreate() {//初始化前
         },
@@ -96,10 +100,21 @@
 
         },
         watch: {
-            //data(val, newval) {
-            //console.log(val)
-            //console.log(newval)
-            //}
+            '$store.state.match': {
+                handler(newValue) {
+                    this.today =0;
+                    this.rolling=0;
+                    newValue.forEach((itme) => {
+                        if(itme['status']===1 || itme['status']===2){
+                            this.today++;
+                        }
+                        if(itme['status']===2){
+                            this.rolling++;
+                        }
+                    });
+                },
+                deep: true
+            }
         }
     }
 </script>
@@ -201,14 +216,14 @@
         background-repeat: no-repeat;
         width: 50px;
         height: 44px;
-        background-image: url('../assets/images/svg/games.svg');
+        background-image: url('../../assets/images/svg/games.svg');
     }
 
     .match-tab .vux-tab-ink-bar {
         background-color: transparent;
         height: 44px;
         background-repeat: no-repeat;
-        background-image: url('../assets/images/svg/ink-bar.svg');
+        background-image: url('../../assets/images/svg/ink-bar.svg');
         background-position: 50%;
     }
 

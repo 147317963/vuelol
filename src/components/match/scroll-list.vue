@@ -6,9 +6,7 @@
                 <div class="__refresh" style="margin-top: -50px">
                     <div class="refresh-text">{{pulldownMsg}}</div>
                 </div>
-                <div>
-
-                </div>
+                <home-match-card></home-match-card>
                 <div class="empty-list" style="display: none">
                     选手正在赛前准备，请耐心等候...
                     <div class="base-button empty-btn button--dark">
@@ -25,21 +23,18 @@
 
 <script>
 
+    import HomeMatchCard from '@/components/match/home-match-card';
+
 
     export default {
         name: "scroll-list",
-        props: {
-            // 显示
-            LoadingBkg: {
-                type: [Boolean],
-            },
+        components: {//注册组件
+            'home-match-card': HomeMatchCard,
         },
         data() {
             return {
                 scroll: '',
                 pulldownMsg: '下拉刷新',
-                match: [],
-                matchPost: [],
                 // styleObject: {
                 //     'margin-top': '-50px',
                 //     // 'display': 'block'
@@ -55,26 +50,24 @@
 
         },
         mounted() {//加载完毕后
-            const _this = this;
 
             this.$nextTick(() => {
-                _this.$get(_this.$api.match).then((res) => {
+                this.$get(this.$api.match).then((res) => {
                     //刷新数据
-                    _this.match = res.datas;
+                    this.$store.state.match = res.datas;
                     // _this.matchPost = res.datas;
                     //刷新列表后，重新计算滚动区域高度
                     // _this.upMatch();
 
                 });
-            });
-            this.$nextTick(() => {
                 this.scroll = new this.$BScroll(this.$refs.scroll, {       //初始化better-scroll
-                    probeType: 1,   //1 滚动的时候会派发scroll事件，会截流。2滚动的时候实时派发scroll事件，不会截流。 3除了实时派发scroll事件，在swipe的情况下仍然能实时派发scroll事件
+                    probeType: 2,   //1 滚动的时候会派发scroll事件，会截流。2滚动的时候实时派发scroll事件，不会截流。 3除了实时派发scroll事件，在swipe的情况下仍然能实时派发scroll事件
                     click: true,   //是否派发click事件
                     mouseWheel: true,
                     tap: true,
                     scrollY: true,
                     scrollX: false,
+                    // bounce: false,
                     scrollbar: {
                         fade: true,
                         interactive: false // 1.8.0 新增
@@ -82,15 +75,21 @@
                     pullDownRefresh: {
                         threshold: 50, // 下拉距离超过30px触发pullingDown事件
                         stop: 50 // 回弹停留在距离顶部20px的位置
-                    }
+                    },
+                    // snap:{
+                    //     loop:false,
+                    //     speed:600,
+                    // }
 
                 });
-                // 滑动过程中事件
                 this.scroll.on('pullingDown', () => {
 
                     // this.styleObject.display ='block';
+                    this.$store.state.matchRefresh=true;
+                    this.$store.state.match=[];
                     this.pulldownMsg = '刷新中..';
                 });
+
                 //滑动结束松开事件
                 this.scroll.on('touchEnd', (pos) => {  //上拉刷新
                     // _this.pulldownMsg = '刷新中..';
@@ -99,20 +98,21 @@
                         // this.$socket.emit("match",{"asd":"我是内容"});
 
                         setTimeout(() => {
-                            _this.$get(_this.$api.match).then((res) => {
+                            this.$get(this.$api.match).then((res) => {
                                 // console.log(res);
                                 //刷新数据
                                 // _this.matchZl(res.datas);
-                                // _this.match = res.datas;
+                                this.$store.state.match = res.datas;
                                 // console.log(moment(_this.match[0]['start_time']).diff(moment()));
                                 //恢复刷新提示文本值
-                                _this.pulldownMsg = '下拉刷新';
+                                this.pulldownMsg = '下拉刷新';
+                                this.$store.state.matchRefresh=false;
                                 // 事情做完，需要调用此方法告诉 better-scroll 数据已加载，否则下拉事件只会执行一次
-                                _this.scroll.finishPullDown();
+                                this.scroll.finishPullDown();
                                 //刷新成功后提示
                                 // _this.refreshalert();
                                 //刷新列表后，重新计算滚动区域高度
-                                _this.scroll.refresh();
+                                // this.scroll.refresh();
                             })
                         }, 1000)
                     }
@@ -128,8 +128,6 @@
         },
         updated() {//更新数据
         },
-        components: {//注册组件
-        },
         // sockets: {
         //     connect() {
         //         console.log('socket connected');
@@ -143,10 +141,12 @@
         //     }
         // },
         watch: {
-            //data(val, newval) {
-            //console.log(val)
-            //console.log(newval)
-            //}
+            '$store.state.match'() {
+                this.$nextTick(() => {
+                    this.scroll.refresh();
+                    // this.scroll.finishPullUp();
+                })
+            }
             // match: {
             //     handler(val, newval) {
             //         // console.log(val);
@@ -178,5 +178,60 @@
     .home-page .refresh-text {
         font-size: 1.4rem;
         color: #bacef1;
+    }
+    .home-page .empty-list {
+        margin-top: 60px;
+        color: #1ad2fe;
+    }
+
+
+    .base-button {
+        width: 100%;
+        height: 40px;
+        margin: 8px 0;
+        border-radius: 4px;
+        background: linear-gradient(90deg,#1efffa,#34cdff);
+        box-shadow: 0 0 4px 0 rgba(14,20,34,.5);
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+    .button--dark {
+        background-image: linear-gradient(90deg,#298a97,#317699);
+        box-shadow: 0 0 4px 0 rgba(14,20,34,.5);
+    }
+    .home-page .empty-list .empty-btn {
+        width: 150px;
+        margin: 20px auto 0;
+    }
+    .base-button .button-border {
+        height: 38px;
+        border-radius: 3px;
+    }
+    .base-button .button-border .button-content, .base-button .button-border {
+        width: calc(100% - 2px);
+        background-image: linear-gradient(90deg,#21abb1,#2e8fb4);
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+    .button--dark .button-border {
+        background-image: linear-gradient(#323e57,#1d2639);
+    }
+    .base-button .button-border .button-content {
+        height: 36px;
+        border-radius: 2px;
+        border: none;
+        color: #fff;
+        font-size: 1.4rem;
+    }
+    .button--dark .button-border .button-content {
+        background: #252f44;
     }
 </style>

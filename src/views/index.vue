@@ -12,11 +12,11 @@
 </template>
 
 <script>
-    import ScrolLlist from  '@/components/scroll-list'
-    import MatchInfo from '@/components/match-info'
+    import ScrolLlist from  '@/components/match/scroll-list'
+    import MatchInfo from '@/components/match/match-info'
     import LoadingBkg from '@/components/loading/loading-bkg'
-    import MatchTab from '@/components/match-tab'
-    import GamesPicker from '@/components/games-picker'
+    import MatchTab from '@/components/match/match-tab'
+    import GamesPicker from '@/components/match/games-picker'
     export default {
         name: "index",
         data() {
