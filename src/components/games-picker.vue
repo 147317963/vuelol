@@ -1,7 +1,7 @@
 <template>
 <!--    <collapse-transition>-->
     <transition mode="out-in" enter-active-class="animated fadeInDown" leave-active-class="animated fadeOutUp">
-        <div class="vux-popup-dialog games-picker vux-popup-top vux-popup-show" v-show="active==1" ref="scroll">
+        <div class="vux-popup-dialog games-picker vux-popup-top vux-popup-show" v-show="this.$store.state.gameListShow===1" ref="scroll">
 
             <div  class="vux-checker-box checker-content">
                 <div  class="default-checker-item selected-checker-item" @click="">
@@ -13,7 +13,7 @@
                     <div  class="selected-checker-light"></div>
                 </div>
 
-                <div   class="vux-checker-item vux-tap-active default-checker-item selected-all-games" v-for="itme  in gameList" :key="itme['id']">
+                <div   class="vux-checker-item vux-tap-active default-checker-item selected-all-games" v-for="itme  in this.$store.state.gameList" :key="itme['id']">
                     <div  style="height: 2px;">&nbsp;</div>
                     <div  class="games-info"><img  alt="" class="games-icon"
                                                    :src="'//www.nmgdjkj.com/'+itme.game_logo"
@@ -205,26 +205,30 @@
     // import CollapseTransition from '@/utils/collapse-transition'; // 本人将collapse-transition.js 放置在工具类utils文件夹
     export default {
         name: "games-picker",
-        props: {
-            active: {
-                type: [Number,String],
-            },
-            gameList:{
-                type: [Array],
-            }
-        },
         data() {
             return {
                 scroll:'',
 
 
+
             }
         },
         methods: {//条用方法
-            childActive(value){
-                this.$emit('fatherActive',value);
-            },
+            getGameList(){
+                this.$nextTick(() => {
 
+                    this.$get(this.$api.game).then(res => {
+                        if(res.code === 200){
+                            this.$store.state.gameList = res.datas;
+                            // this.gameList = res.datas;
+
+                        }
+
+                    });
+                });
+
+
+            },
             setScroll() {
                 this.$nextTick(() => {
                     if(this.scroll){
@@ -248,6 +252,8 @@
 
         },
         mounted() {//加载完毕后
+
+            this.getGameList();
         },
         beforeCreate() {//初始化前
         },
@@ -257,15 +263,15 @@
             // 'collapse-transition': CollapseTransition,
         },
         watch: {
-            gameList: {
-                handler() {
-                    this.setScroll();
-                },
-                deep: true
-            },
-            active(){
+            // '$store.state.gameList'() {
+            //     this.setScroll();
+            // },
+            '$store.state.gameListShow'() {
+
                 this.setScroll();
-            }
+                console.log('更新');
+
+            },
             //data(val, newval) {
             //console.log(val)
             //console.log(newval)

@@ -1,7 +1,7 @@
 <template>
    <div class="home-page router-view">
-       <match-tab @fatherActive="fatherActive"  :active="active"></match-tab>
-       <games-picker :gameList="gameList" :active="active"></games-picker>
+       <match-tab></match-tab>
+       <games-picker></games-picker>
        <match-info></match-info>
        <loading-bkg></loading-bkg>
        <scroll-list></scroll-list>
@@ -14,35 +14,22 @@
 <script>
     import ScrolLlist from  '@/components/scroll-list'
     import MatchInfo from '@/components/match-info'
-    import LoadingBkg from '@/components/loading-bkg'
+    import LoadingBkg from '@/components/loading/loading-bkg'
     import MatchTab from '@/components/match-tab'
     import GamesPicker from '@/components/games-picker'
     export default {
         name: "index",
         data() {
             return {
-                active:0,
-                gameList:[],
+
             }
         },
         methods: {//条用方法
-            fatherActive(value){
-                this.active = value;
-            },
-            getGameList(){
-                let _this = this;
-                this.$get(this.$api.game).then(res => {
-                    if(res.code == 200){
-                        _this.gameList = res.datas;
 
-                    }
-
-                });
-            },
 
         },
         mounted() {//加载完毕后
-            this.getGameList();
+
         },
         beforeCreate() {//初始化前
         },
