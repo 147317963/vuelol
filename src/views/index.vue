@@ -3,6 +3,7 @@
        <match-tab @fatherActive="fatherActive"  :active="active"></match-tab>
        <games-picker :gameList="gameList" :active="active"></games-picker>
        <match-info></match-info>
+       <loading-bkg></loading-bkg>
        <scroll-list></scroll-list>
    </div>
 
@@ -13,6 +14,7 @@
 <script>
     import ScrolLlist from  '@/components/scroll-list'
     import MatchInfo from '@/components/match-info'
+    import LoadingBkg from '@/components/loading-bkg'
     import MatchTab from '@/components/match-tab'
     import GamesPicker from '@/components/games-picker'
     export default {
@@ -51,6 +53,7 @@
             'games-picker': GamesPicker,
             'match-info': MatchInfo,
             'scroll-list': ScrolLlist,
+            'loading-bkg': LoadingBkg,
         },
         watch: {
             //data(val, newval) {

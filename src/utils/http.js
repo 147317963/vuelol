@@ -3,17 +3,22 @@ import router from '../router'; //引入路由
 import QS from 'qs'; // 引入qs模块，用来序列化post类型的数据，后面会提到
 // vant的toast提示框组件，大家可根据自己的ui组件更改。
 import {Toast} from 'vant';
+import Vue from "vue";
+import VueSocketIO from 'vue-socket.io' //webSocket
 
 
 // 环境的切换
 if (process.env.NODE_ENV == 'development') {
-    axios.defaults.baseURL = 'http://www.llgj.com/';
+    axios.defaults.baseURL = 'http://192.168.8.118';
 } else if (process.env.NODE_ENV == 'debug') {
     axios.defaults.baseURL = '';
 } else if (process.env.NODE_ENV == 'production') {
-    axios.defaults.baseURL = 'http://www.llgj.com/';
+    axios.defaults.baseURL = 'http://192.168.8.118';
 }
-
+Vue.use(new VueSocketIO({
+    debug: process.env.NODE_ENV == 'development'?true:false,
+    connection: axios.defaults.baseURL+':9501',
+}));
 
 // 请求超时时间
 axios.defaults.timeout = 10000;
@@ -115,7 +120,7 @@ axios.interceptors.response.use(
         });
 
 
-        return error;
+        return Promise.reject(error);
 
 
 
