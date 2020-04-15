@@ -4,6 +4,8 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
     state: {
+        //头部显示
+        headerKefu:0,
         //上拉刷新出现loading
         matchRefresh:false,
         //显示游戏列表按钮

@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div style="padding-left: 8px;padding-right: 8px;">
         <div class="home-match-card" v-for="itme  in this.$store.state.match" :key="itme['id']">
             <section class="card-header">
-                <img width="20px" src="//www.nmgdjkj.com//file/5155ce2645f2486533bd28f9e9c2026e.svg" lazy="loaded">
+                <img style="width: 20px"  src="//www.nmgdjkj.com//file/5155ce2645f2486533bd28f9e9c2026e.svg">
                 <div class="tournament-name">
                     {{itme.tournament_name}}
                 </div>
@@ -321,9 +321,7 @@
         font-size: 1.2rem;
     }
 
-    img {
-        pointer-events: none;
-    }
+
 
     .home-match-card .card-header .tournament-name {
         white-space: nowrap;

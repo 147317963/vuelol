@@ -50,11 +50,12 @@
 
         },
         mounted() {//加载完毕后
-
+            this.$store.state.matchRefresh=true;
             this.$nextTick(() => {
                 this.$get(this.$api.match).then((res) => {
                     //刷新数据
                     this.$store.state.match = res.datas;
+                    this.$store.state.matchRefresh=false;
                     // _this.matchPost = res.datas;
                     //刷新列表后，重新计算滚动区域高度
                     // _this.upMatch();
@@ -86,7 +87,7 @@
 
                     // this.styleObject.display ='block';
                     this.$store.state.matchRefresh=true;
-                    this.$store.state.match=[];
+                    // this.$store.state.match=[];
                     this.pulldownMsg = '刷新中..';
                 });
 
@@ -161,8 +162,8 @@
 <style scoped>
     .home-page .scroll-list {
         height: calc(100% - 36px);
-        padding-left: 8px;
-        padding-right: 8px;
+        /*padding-left: 8px;*/
+        /*padding-right: 8px;*/
     }
 
     .__vuescroll .__refresh, .__vuescroll .__load {

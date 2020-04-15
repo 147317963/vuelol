@@ -127,6 +127,23 @@ axios.interceptors.response.use(
     }
 
 );
+router.beforeEach((to, from, next) => {
+    // 判断当前路由以及路由的父路由中是否包含meta，meta里是否有requiredAuth
+    // to.matched中包含当前路由以及父路由
+    // 如果判断出to.matched中某个路由里有meta.requiredAuth
+    // console.log(to);
+
+    if (to.matched[0]) {
+
+        next()
+
+    } else {
+        //没有该URL 就跳转到首页
+        next({
+            path:'/'
+        })
+    }
+});
 
 /**
  * get方法，对应get请求

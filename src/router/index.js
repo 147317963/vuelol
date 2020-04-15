@@ -2,13 +2,17 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import index from '../views/index.vue'
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
   const routes = [
   {
     path: '/',
     name: 'index',
-    component: index
+    // component: index
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/index.vue')
   },
   // {
   //   path: '/about',
@@ -18,6 +22,62 @@ Vue.use(VueRouter)
   //   // which is lazy-loaded when the route is visited.
   //   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   // }
+    {
+      path: '/login',
+      name: 'login',
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "about" */ '../components/login.vue')
+    },
+    {
+      path: '/forgotPassword',
+      name: 'forgotPassword',
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "about" */ '../components/forgot_password.vue')
+    },
+    {
+      path: '/bettingRules',
+      name: 'bettingRules',
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "about" */ '../components/betting-rules.vue')
+    },
+    {
+      path: '/register',
+      name: 'register',
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "about" */ '../components/register.vue')
+    },
+    {
+      path: '/personal',
+      name: 'personal',
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "about" */ '../components/personal/index.vue')
+    },
+    {
+      path: '/about',
+      name: 'about',
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "about" */ '../components/about.vue')
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "about" */ '../components/settings/index.vue')
+    },
 ]
 
 const router = new VueRouter({

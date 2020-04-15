@@ -80,8 +80,8 @@
   .weui-tab__panel {
     box-sizing: border-box;
     height: 100%;
-    padding-bottom: 50px;
-    overflow: auto;
+    /*padding-bottom: 50px;*/
+    overflow: hidden;
     -webkit-overflow-scrolling: touch;
   }
   html {
