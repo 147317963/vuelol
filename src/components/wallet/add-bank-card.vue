@@ -4,7 +4,7 @@
 
 <script>
     export default {
-        name: "addBankCard",
+        name: "add-bank-card",
         data() {
             return {}
         },
