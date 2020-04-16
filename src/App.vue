@@ -9,10 +9,11 @@
       </div>
 
     </div>
-
+    <bet></bet>
   </div>
 </template>
 <script>
+  import bet  from '@/components/bet/index'
   import AppHeader from '@/components/app-header'
   export default {
     name: "app",
@@ -29,6 +30,7 @@
     },
     components: {//注册组件
       'app-header': AppHeader,
+      'bet': bet,
     },
     watch: {
       //data(val, newval) {
@@ -40,8 +42,9 @@
 </script>
 <style>
   #app {
-    height: calc(100% - 48px);
-    /*height: 100%;*/
+    /*height: calc(100% - 48px);*/
+    /*max-width: 375px;*/
+    height: 100%;
   }
   body {
     overflow-x: hidden;
@@ -63,10 +66,6 @@
     background-color: #0c121f;
   }
 
-  body, html {
-    height: 100%;
-    width: 100%;
-  }
   img {
     pointer-events: none;
   }
@@ -75,7 +74,7 @@
   }
   .weui-tab {
     position: relative;
-    height: 100%;
+    height: calc(100% - 48px);
   }
   .weui-tab__panel {
     box-sizing: border-box;

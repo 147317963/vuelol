@@ -2,8 +2,8 @@
     <section class="match-info">
         <div class="home-notice">
             <div class="notice-icon"></div>
-            <div class="vux-marquee" >
-                <ul class="vux-marquee-box" ref="notice"
+            <div class="vux-marquee" ref="notice">
+                <ul class="vux-marquee-box"
                     :style="'transform: translate3d(0px, '+bottom+'px, 0px); transition: transform 300ms ease 0s;'" >
                     <li class="notice-item" v-for="itme in this.$store.state.announcement" :key="itme.id" >
                         <div>{{itme['cn.body']}}</div>
@@ -42,9 +42,10 @@
             setInterval( ()=> {
                 const  Height = this.$refs.notice.offsetHeight;
 
-                this.bottom = this.bottom - 34;
+                this.bottom = this.bottom - Height;
 
-                if(Math.abs(this.bottom)===Height){
+
+                if(Math.abs(this.bottom)>=this.$refs.notice.childNodes[0].offsetHeight){
                     this.bottom = 0;
                 }
             }, 3000);

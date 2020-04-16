@@ -32,6 +32,7 @@ module.exports = {
             postcss: {
                 plugins: [
                     require("postcss-px-to-viewport")({
+                        rootValue: 32, // 换算的基数(设计图750的根字体为32)
                         unitToConvert: 'px', //将要转化的单位
                         viewportWidth: 375,
                         // viewportHeight: 1334,

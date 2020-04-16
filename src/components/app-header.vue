@@ -64,7 +64,7 @@
     .app-header ul .home-logo {
         background-position: 50%;
         background-repeat: no-repeat;
-        width: 117px;
+        width: 31.2%;
         height: 26px;
         background-image: url('../assets/images/svg/logo.svg');
     }
