@@ -9,13 +9,18 @@ const store = new Vuex.Store({
         //上拉刷新出现loading
         matchRefresh:false,
         //显示游戏列表按钮
-        gameListShow:0,
+        gameListShow:false,
         //游戏列表数组
         gameList: [],
         //比赛列表
         match:[],
         //公告列表
         announcement:[],
+        //下注显示按钮
+        betSlipPop:false,
+        betSlipPopBody:false,
+        //下注订单
+        betOdds:[],
 
     },
     getters: {

@@ -9,11 +9,11 @@
       </div>
 
     </div>
-    <bet></bet>
+    <bet-slip-pop></bet-slip-pop>
   </div>
 </template>
 <script>
-  import bet  from '@/components/bet/index'
+  import BetSlipPop  from '@/components/bet/bet-slip-pop'
   import AppHeader from '@/components/app-header'
   export default {
     name: "app",
@@ -30,7 +30,7 @@
     },
     components: {//注册组件
       'app-header': AppHeader,
-      'bet': bet,
+      'bet-slip-pop': BetSlipPop,
     },
     watch: {
       //data(val, newval) {
@@ -41,6 +41,12 @@
   }
 </script>
 <style>
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+  }
+  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
+  }
   #app {
     /*height: calc(100% - 48px);*/
     /*max-width: 375px;*/

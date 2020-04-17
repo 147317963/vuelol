@@ -1,26 +1,26 @@
 <template>
     <div class="match-tab">
         <transition mode="out-in" enter-active-class="animated fadeInUp">
-        <section class="filter-matches" v-show="this.$store.state.gameListShow===0">
+        <section class="filter-matches" v-show="this.$store.state.gameListShow===false">
             <div class="vux-tab-wrap match-tab">
                 <div class="vux-tab-container">
                     <div class="vux-tab">
-                        <div class="vux-tab-item" style="border: none;color:rgb(255, 255, 255);" @click.stop="styleObject(0)">
+                        <div class="vux-tab-item" :style="this.left === 0?'border: none; color: rgb(255, 255, 255);':'border: none; color: rgb(186, 206, 241);'"  style="border: none;color:rgb(255, 255, 255);" @click.stop="styleObject(0)">
                             今日
                             <span class="match-number">{{today}}</span>
                         </div>
                         <span class="column-line"></span>
-                        <div class="vux-tab-item vux-tab-selected" style="border: none; color: rgb(186, 206, 241);" @click.stop="styleObject(1)">
+                        <div class="vux-tab-item" :style="this.left === 25?'border: none; color: rgb(255, 255, 255);':'border: none; color: rgb(186, 206, 241);'" @click.stop="styleObject(1)">
                             滚盘
                             <span class="match-number">{{rolling}}</span>
                         </div>
                         <span class="column-line"></span>
-                        <div class="vux-tab-item" style="border: none; color: rgb(186, 206, 241);" @click.stop="styleObject(2)" >
+                        <div class="vux-tab-item" :style="this.left === 50?'border: none; color: rgb(255, 255, 255);':'border: none; color: rgb(186, 206, 241);'" @click.stop="styleObject(2)" >
                             赛前
                             <span class="match-number">58</span>
                         </div>
                         <span class="column-line"></span>
-                        <div class="vux-tab-item" style="border: none; color: rgb(186, 206, 241);" @click.stop="styleObject(3)">
+                        <div class="vux-tab-item" :style="this.left === 75?'border: none; color: rgb(255, 255, 255);':'border: none; color: rgb(186, 206, 241);'" @click.stop="styleObject(3)">
                             已结束
                         </div>
                         <span class="column-line"></span>
@@ -31,16 +31,16 @@
                 </div>
                 <!--                <div class="vux-tab-ink-bar vux-tab-ink-bar-transition-forward" style="display: block; height: 22px; background-color: transparent; left: 50%; right: 25%;">&lt;!&ndash;&ndash;&gt;</div>-->
             </div>
-            <div class="show-filter-games-btn" @click.stop="setGameListShow(1)"></div>
+            <div class="show-filter-games-btn" @click.stop="$store.state.gameListShow=true"></div>
         </section>
         </transition>
         <transition mode="out-in" enter-active-class="animated fadeInUp">
-            <section class="filter-games" v-show="this.$store.state.gameListShow===1">
+            <section class="filter-games" v-show="this.$store.state.gameListShow===true">
                 <div class="hide-filter-games-btn" style="visibility: hidden;">&nbsp;&nbsp;
                 </div>
                 <div>游戏筛选</div>
                 <div class="hide-filter-games-btn">
-                    <div class="btn-content" @click.stop="setGameListShow(0)">✓</div>
+                    <div class="btn-content" @click.stop="$store.state.gameListShow=false">✓</div>
                 </div>
             </section>
         </transition>
@@ -66,9 +66,6 @@
             }
         },
         methods: {//条用方法
-            setGameListShow(value){
-               return  this.$store.commit('setGameListShow',value)
-            },
             styleObject(value){
                 if(value===0){
                     this.left = 0;
@@ -114,7 +111,20 @@
                     });
                 },
                 deep: true
-            }
+            },
+            // 'this.$store.state.match'(newValue){
+            //     console.log(newValue);
+            //     this.today =0;
+            //     this.rolling=0;
+            //     newValue.forEach((itme) => {
+            //         if(itme['status']===1 || itme['status']===2){
+            //             this.today++;
+            //         }
+            //         if(itme['status']===2){
+            //             this.rolling++;
+            //         }
+            //     });
+            // }
         }
     }
 </script>

@@ -1,7 +1,7 @@
 <template>
     <transition name="fade">
     <div style="padding-left: 8px;padding-right: 8px;" v-show="!this.$store.state.matchRefresh">
-        <div class="home-match-card" v-for="itme  in this.$store.state.match" :key="itme['id']" @click.stop="">
+        <div class="home-match-card" v-for="itme  in this.$store.state.match" :key="itme['id']">
             <section class="card-header">
                 <img style="width: 20px"  src="//www.nmgdjkj.com//file/5155ce2645f2486533bd28f9e9c2026e.svg">
                 <div class="tournament-name">
@@ -49,7 +49,7 @@
                     <div class="match-card-button"
                          :class="[setClass(itme,0,1),setClass(itme,0,2),setClass(itme,0,3)]">
                         <div class="button-dark-border">
-                            <div class="button-content" @click.stop="itme['odds'][0]['status']===1?$store.state.betSlipPop=true:''">
+                            <div class="button-content">
                                 <div class="button-name">{{itme['team'][0]['team_name']}}</div>
                                 <div class="button-odds-content">
                                     <div class="odds-rising-icon"></div>
@@ -73,7 +73,7 @@
                     <div class="match-card-button"
                          :class="[setClass(itme,1,1),setClass(itme,1,2),setClass(itme,1,3)]">
                         <div class="button-dark-border">
-                            <div class="button-content" @click.stop="">
+                            <div class="button-content">
                                 <div class="button-name">{{itme['team'][1]['team_name']}}</div>
                                 <div class="button-odds-content">
                                     <div class="odds-rising-icon"></div>
@@ -98,9 +98,16 @@
     export default {
         name: "home-match-card",
         data() {
-            return {}
+            return {
+
+            }
         },
         methods: {//条用方法
+            postListener() {
+                console.log(this.$socket);
+                this.$socket.emit("match",this.$socket.id);
+
+            },
             momentDiff(itme, class1, class2) {
                 return moment(itme).diff(moment()) <= 0 ? class1 : class2;
             },
@@ -156,13 +163,109 @@
                 }
 
             },
+            matchCallback(data) {
+
+                data.forEach((item, index) => {
+                    if(!this.$store.state.match.hasOwnProperty(index)){
+                        return;
+                    }
+                    // this.$set(this.match,[index]['status'],item['status']);
+
+                    if(this.$store.state.match){
+
+                    }
+
+                    this.$store.state.match[index]['status'] = item['status'];
+
+                    if (item.hasOwnProperty('odds')) {
+                        item['odds'].forEach((odds, o) => {
+                            this.$store.state.match[index]['odds'][o]['status'] = odds['status'];
+                            // this.$set(this.match,[index]['odds'][o],odds);
+                            if (Number(this.$store.state.match[index]['odds'][o]['odds']) > Number(odds['odds'])) {
+
+                                console.log(this.$store.state.match[index]['odds'][o]['odds'],odds['odds']);
+                                this.$store.state.match[index]['odds'][o]['tag'] = 'btn-odds-dropping';
+
+                                setTimeout(() => {
+                                    this.$store.state.match[index]['odds'][o]['tag'] = ''
+                                }, 6000);
+                            } else if (Number(this.$store.state.match[index]['odds'][o]['odds']) < Number(odds['odds'])) {
+
+                                console.log(this.$store.state.match[index]['odds'][o]['odds'],odds['odds']);
+                                this.$store.state.match[index]['odds'][o]['tag'] = 'btn-odds-rising';
+                                setTimeout(() => {
+                                    this.$store.state.match[index]['odds'][o]['tag'] = ''
+                                }, 6000);
+                            }
+                            this.$store.state.match[index]['odds'][o]['odds'] = odds['odds'];
+                            this.$TweenLite.to(this.$store.state.match[index]['odds'][o], 0.3, {odds: odds['odds']});
+                        });
+                    }
+
+
+                    if (item.hasOwnProperty('team')) {
+                        item['team'].forEach((team, t) => {
+                            this.$store.state.match[index]['team'][t] = team;
+                        });
+                    }
+
+
+                })
+
+            },
+
+            // upMatch() {
+            //
+            //
+            //     // console.log(Object.keys(this.matchPost));
+            //     const _this = this;
+            //     this.match.forEach((item, index) => {
+            //
+            //         let team_id = [];
+            //         let odds_id = [];
+            //
+            //         Object.keys(item).filter((key) => ['id'].includes(key)).forEach((key) => {
+            //             // console.log(key);
+            //             if (!_this.matchPost[index]) {
+            //                 _this.matchPost.push({id: item[key]});
+            //             }
+            //             // this.matchPost[index][key] = item[key]
+            //         });
+            //
+            //         if (item.hasOwnProperty('odds')) {
+            //             item['odds'].forEach((odds, o) => {
+            //                 Object.keys(odds).filter((key) => ['id'].includes(key)).forEach((key) => {
+            //                     odds_id.push({id: odds[key]});
+            //                     _this.matchPost[index]['odds'] = odds_id;
+            //
+            //                 })
+            //             });
+            //         }
+            //
+            //         if (item['team']) {
+            //             item['team'].forEach((team, t) => {
+            //                 Object.keys(team).filter((key) => ['id'].includes(key)).forEach((key) => {
+            //                     team_id.push({id: team[key]});
+            //                     _this.matchPost[index]['team'] = team_id;
+            //
+            //                 })
+            //             })
+            //
+            //         }
+            //
+            //
+            //     });
+            //
+            //     console.log(this.matchPost);
+            //
+            // },
+
+
         },
         mounted() {//加载完毕后
-            //发送信息进队伍等待群发
-            this.$nextTick(() => {
-                // this.scroll.finishPullUp();
-            })
-
+            // setInterval(() => {
+                this.postListener()
+            // }, 8000)
         },
         beforeCreate() {//初始化前
         },
@@ -172,8 +275,6 @@
             //查看socket是否渲染成功
             connect() {
                 console.log("链接成功");
-                //提交列队
-
             },
             disconnect() {
                 console.log("断开链接");
@@ -183,42 +284,7 @@
             },
             //客户端接收后台传输的socket事件
             matchCallback(data) {
-                data['odds'].forEach((item, index) => {
-                    this.$store.state.match.forEach((match, mindex) => {
-                        if (match.hasOwnProperty('odds')) {
-
-                            match['odds'].forEach((odds, oindex) => {
-
-                                if (odds['id'] === item['id']) {
-
-                                    this.$store.state.match[mindex]['odds'][oindex]['status'] = item['status'];
-                                    //
-                                    if (Number(this.$store.state.match[mindex]['odds'][oindex]['odds']) > Number(item['odds'])) {
-
-                                        this.$store.state.match[mindex]['odds'][oindex]['tag'] = 'btn-odds-dropping';
-
-                                        setTimeout(() => {
-                                            this.$store.state.match[mindex]['odds'][oindex]['tag'] = ''
-                                        }, 6000);
-                                    } else if (Number(this.$store.state.match[mindex]['odds'][oindex]['odds']) < Number(item['odds'])) {
-
-                                        this.$store.state.match[mindex]['odds'][oindex]['tag'] = 'btn-odds-rising';
-                                        setTimeout(() => {
-                                            this.$store.state.match[mindex]['odds'][oindex]['tag'] = ''
-                                        }, 6000);
-                                    }
-                                    console.log(this.$store.state.match[mindex]['odds'][oindex]['odds'], item['odds']);
-                                    this.$store.state.match[mindex]['odds'][oindex]['odds'] = item['odds'];
-                                    this.$TweenLite.to(this.$store.state.match[mindex]['odds'][oindex], 0.3, {odds: item['odds']});
-                                }
-                            });
-
-                        }
-
-                    });
-
-
-                })
+                this.matchCallback(data);
 
             },
 

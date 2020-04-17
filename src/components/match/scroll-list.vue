@@ -53,7 +53,7 @@
             this.$store.state.matchRefresh=true;
             this.$nextTick(() => {
                 this.$get(this.$api.match).then((res) => {
-                    //刷新数据
+                    //首次进入获得数据
                     this.$store.state.match = res.datas;
                     this.$store.state.matchRefresh=false;
                     // _this.matchPost = res.datas;
@@ -87,8 +87,9 @@
 
                     // this.styleObject.display ='block';
                     this.$store.state.matchRefresh=true;
-                    // this.$store.state.match=[];
                     this.pulldownMsg = '刷新中..';
+                    //先清空数据
+                    this.$store.state.match=[];
                 });
 
                 //滑动结束松开事件
@@ -97,7 +98,6 @@
                     // _this.scroll.finishPullUp();
                     if (pos.y > 50) {
                         // this.$socket.emit("match",{"asd":"我是内容"});
-
                         setTimeout(() => {
                             this.$get(this.$api.match).then((res) => {
                                 // console.log(res);
