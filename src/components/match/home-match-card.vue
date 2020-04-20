@@ -1,33 +1,35 @@
 <template>
     <transition name="fade">
     <div style="padding-left: 8px;padding-right: 8px;" v-show="!this.$store.state.matchRefresh">
-        <div class="home-match-card" v-for="itme  in this.$store.state.match" :key="itme['id']" @click.stop="">
+        <div class="home-match-card" v-for="(item, index)  in this.$store.state.match" :key="index" @click.stop="">
             <section class="card-header">
-                <img style="width: 20px"  src="//www.nmgdjkj.com//file/5155ce2645f2486533bd28f9e9c2026e.svg">
-                <div class="tournament-name">
-                    {{itme.tournament_name}}
+<!--                游戏logo-->
+                <img style="width: 20px"    v-lazy="'//www.nmgdjkj.com/'+$store.state.gameList[_.findIndex($store.state.gameList,function(o) { return o.id == item['game_id']})]['game_logo']" >
+<!--                跳转到当前赛季列表-->
+                <div class="tournament-name"   @click.stop="$router.push({path:'/login',query:{id:item['tournament_id']}})">
+                    {{item.tournament_name}}
                 </div>
-                <div class="match-round">&nbsp;/ {{itme.round.toUpperCase()}}</div>
+                <div class="match-round">&nbsp;/ {{item.round.toUpperCase()}}</div>
                 <div class="play-count">
                     +73
                 </div>
             </section>
             <section class="card-body">
                 <div class="card-body-team">
-                    <img class="team-logo" :src="'//www.nmgdjkj.com/'+itme['team'][0]['team_logo']">
+                    <img class="team-logo"  v-lazy="'//www.nmgdjkj.com/'+item['team'][_.findIndex(item['team'],{'pos':1})]['team_logo']"   >
                 </div>
                 <div class="card-body-center">
                     <!--                                团队1 logo-->
                     <img src="../../assets/images/svg/kapian_you.svg"
                          class="center-left">
                     <!--                                比分-->
-                    <div class="team-score" v-if="momentDiff2(itme['start_time'])<=0">
+                    <div class="team-score" v-if="moment(item['start_time']).diff(moment())<=0">
                         <div class="score left-score">0</div>
                         <div class="dash-symbol">-</div>
                         <div class="score right-score">1</div>
                     </div>
                     <!--                                开始时间-->
-                    <div class="start-time" v-else>{{itme.start_time.substr(11,5)}}
+                    <div class="start-time" v-else>{{item.start_time.substr(11,5)}}
 
                     </div>
                     <!--                                团队2 logo-->
@@ -35,26 +37,26 @@
                          class="center-right">
                 </div>
                 <div class="card-body-team">
-                    <img class="team-logo" :src="'//www.nmgdjkj.com/'+itme['team'][1]['team_logo']">
+                    <img class="team-logo"  v-lazy="'//www.nmgdjkj.com/'+item['team'][_.findIndex(item['team'],{'pos':2})]['team_logo']"   >
                 </div>
             </section>
-
-            <!--                        没有赔率情况下 不可以操作-->
             <div class="odds-group-title">
-                <div class="empty-badge" v-if="itme['odds']">&nbsp;</div>
-                <div class="title" v-if="itme['odds']">全场 获胜者</div>
+                <!--                        没有赔率情况下 不显示这个-->
+                <div class="empty-badge" v-if="item['odds']">&nbsp;</div>
+                <div class="title" v-if="item['odds']">全场 获胜者</div>
             </div>
             <section class="card-footer">
                 <div class="card-odds-btn">
-                    <div class="match-card-button"
-                         :class="[setClass(itme,0,1),setClass(itme,0,2),setClass(itme,0,3)]">
+                    <div class="match-card-button"  @click.stop="isActive(item['odds'])"
+                         :class="[setClass(item,0,1),setClass(item,0,2),setClass(item,0,3)]">
                         <div class="button-dark-border">
-                            <div class="button-content" @click.stop="itme['odds'][0]['status']===1?$store.state.betSlipPop=true:''">
-                                <div class="button-name">{{itme['team'][0]['team_name']}}</div>
+                            <div class="button-content">
+<!--                                <div class="button-name">{{item['team'][0]['team_name']}}</div>-->
+                                <div class="button-name">{{item['team'][_.findIndex(item['team'],{'pos':1})]['team_name']}}</div>
                                 <div class="button-odds-content">
                                     <div class="odds-rising-icon"></div>
                                     <div class="btn-odds">
-                                        <span v-if="setClass(itme,0,2)!='btn-locked'">{{setOdds(itme,0)}}</span>
+                                        <span v-if="setClass(item,0,2)!='btn-locked'">{{setOdds(item,0)}}</span>
                                     </div>
                                     <div class="odds-dropping-icon"></div>
                                 </div>
@@ -63,22 +65,24 @@
                     </div>
                 </div>
                 <div class="match-status">
-                    <div :class="momentDiff(itme['start_time'],'match-is-live','match-is-early')">
+                    <div :class="moment(item['start_time']).diff(moment()) <= 0 ? 'match-is-live' : 'match-is-early'">
                         <div class="status-icon"
-                             :class="momentDiff(itme['start_time'],'live-icon','early-icon')"></div>
-                        <div class="match-status-text">{{momentDiff(itme['start_time'],'滚盘中','未开始')}}</div>
+                             :class="moment(item['start_time']).diff(moment()) <= 0 ? 'live-icon' : 'early-icon'"></div>
+                        <div class="match-status-text">{{moment(item['start_time']).diff(moment()) <= 0 ? '滚盘中' : '未开始'}}</div>
                     </div>
                 </div>
                 <div class="card-odds-btn">
                     <div class="match-card-button"
-                         :class="[setClass(itme,1,1),setClass(itme,1,2),setClass(itme,1,3)]">
+                         :class="[setClass(item,1,1),
+                         setClass(item,1,2),setClass(item,1,3)
+                         ]">
                         <div class="button-dark-border">
                             <div class="button-content" @click.stop="">
-                                <div class="button-name">{{itme['team'][1]['team_name']}}</div>
+                                <div class="button-name">{{item['team'][_.findIndex(item['team'],{'pos':2} )]['team_name']}}</div>
                                 <div class="button-odds-content">
                                     <div class="odds-rising-icon"></div>
                                     <div class="btn-odds">
-                                        <span v-if="setClass(itme,1,2)!='btn-locked'">{{setOdds(itme,1)}}</span>
+                                        <span v-if="setClass(item,1,2)!='btn-locked'">{{setOdds(item,1)}}</span>
                                     </div>
                                     <div class="odds-dropping-icon"></div>
                                 </div>
@@ -93,7 +97,6 @@
 </template>
 
 <script>
-    import moment from "moment";
     // import _ from 'lodash';
     export default {
         name: "home-match-card",
@@ -101,16 +104,31 @@
             return {}
         },
         methods: {//条用方法
-            momentDiff(itme, class1, class2) {
-                return moment(itme).diff(moment()) <= 0 ? class1 : class2;
+            isActive:function(item){
+                //方法1
+                if(typeof item.checked == 'undefined') {
+                    //全局创建
+                    //Vue.set(item,'checked',true);
+                    //局部创建
+                    this.$set(item,'checked',true);
+                    // console.log(item.text)
+
+                }else{
+                    item.checked = !item.checked;
+                }
+                //方法2
+                this.$set(item,'checked',!item.checked);
             },
-            momentDiff2(itme) {
-                return moment(itme).diff(moment());
-            },
+            // momentDiff(item, class1, class2) {
+            //     return moment(item).diff(moment()) <= 0 ? class1 : class2;
+            // },
+            // momentDiff2(item) {
+            //     return moment(item).diff(moment());
+            // },
 
             setOdds(value, key) {
-                if (value.hasOwnProperty('odds')) {
-                    if (value['odds'].hasOwnProperty(key)) {
+                if (Object.prototype.hasOwnProperty.call (value,'odds')) {
+                    if (Object.prototype.hasOwnProperty.call (value['odds'],key)) {
                         return value['odds'][key]['odds'];
                     }
                     return '';
@@ -121,13 +139,13 @@
             setClass(value, key, type) {
                 //是否有赔率
                 if (type === 1) {
-                    return value.hasOwnProperty('odds') ? '' : 'btn-over'
-
+                    return   Object.prototype.hasOwnProperty.call (value,'odds') ? '' : 'btn-over'
+                //是否禁止下注
                 } else if (type === 2) {
 
-                    if (value.hasOwnProperty('odds')) {
+                    if (Object.prototype.hasOwnProperty.call (value,'odds')) {
 
-                        if (value['odds'].hasOwnProperty(key)) {
+                        if (Object.prototype.hasOwnProperty.call (value['odds'],key)) {
                             if (value['odds'][key]['status'] === 2 || value['odds'][key]['status'] === 5) {
 
                                 return 'btn-locked';
@@ -140,10 +158,11 @@
                         }
                     }
                     return '';
+                //    赔率上升还是降
                 } else if (type === 3) {
-                    if (value.hasOwnProperty('odds')) {
+                    if (Object.prototype.hasOwnProperty.call (value,'odds')) {
 
-                        if (value['odds'].hasOwnProperty(key)) {
+                        if (Object.prototype.hasOwnProperty.call (value['odds'],key)) {
 
                             return value['odds'][key]['tag'];
 
@@ -158,71 +177,16 @@
             },
         },
         mounted() {//加载完毕后
-            //发送信息进队伍等待群发
-            this.$nextTick(() => {
-                // this.scroll.finishPullUp();
-            })
+
+
+
 
         },
         beforeCreate() {//初始化前
         },
         updated() {//更新数据
         },
-        sockets: {
-            //查看socket是否渲染成功
-            connect() {
-                console.log("链接成功");
-                //提交列队
 
-            },
-            disconnect() {
-                console.log("断开链接");
-            },//检测socket断开链接
-            reconnect() {
-                console.log("重新链接");
-            },
-            //客户端接收后台传输的socket事件
-            matchCallback(data) {
-                data['odds'].forEach((item, index) => {
-                    this.$store.state.match.forEach((match, mindex) => {
-                        if (match.hasOwnProperty('odds')) {
-
-                            match['odds'].forEach((odds, oindex) => {
-
-                                if (odds['id'] === item['id']) {
-
-                                    this.$store.state.match[mindex]['odds'][oindex]['status'] = item['status'];
-                                    //
-                                    if (Number(this.$store.state.match[mindex]['odds'][oindex]['odds']) > Number(item['odds'])) {
-
-                                        this.$store.state.match[mindex]['odds'][oindex]['tag'] = 'btn-odds-dropping';
-
-                                        setTimeout(() => {
-                                            this.$store.state.match[mindex]['odds'][oindex]['tag'] = ''
-                                        }, 6000);
-                                    } else if (Number(this.$store.state.match[mindex]['odds'][oindex]['odds']) < Number(item['odds'])) {
-
-                                        this.$store.state.match[mindex]['odds'][oindex]['tag'] = 'btn-odds-rising';
-                                        setTimeout(() => {
-                                            this.$store.state.match[mindex]['odds'][oindex]['tag'] = ''
-                                        }, 6000);
-                                    }
-                                    console.log(this.$store.state.match[mindex]['odds'][oindex]['odds'], item['odds']);
-                                    this.$store.state.match[mindex]['odds'][oindex]['odds'] = item['odds'];
-                                    this.$TweenLite.to(this.$store.state.match[mindex]['odds'][oindex], 0.3, {odds: item['odds']});
-                                }
-                            });
-
-                        }
-
-                    });
-
-
-                })
-
-            },
-
-        },
         components: {//注册组件
         },
         watch: {

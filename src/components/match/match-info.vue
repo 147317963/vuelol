@@ -6,7 +6,7 @@
                 <ul class="vux-marquee-box"
                     :style="'transform: translate3d(0px, '+bottom+'px, 0px); transition: transform 300ms ease 0s;'" >
                     <li class="notice-item" v-for="itme in this.$store.state.announcement" :key="itme.id" >
-                        <div>{{itme['cn.body']}}</div>
+                        <div>{{itme['cn_body']}}</div>
                     </li>
 
                 </ul>
@@ -39,7 +39,7 @@
 
                 });
             });
-            setInterval( ()=> {
+            this.timer=setInterval( ()=> {
                 const  Height = this.$refs.notice.offsetHeight;
 
                 this.bottom = this.bottom - Height;
@@ -55,6 +55,9 @@
 
         },
         beforeCreate() {//初始化前
+        },
+        beforeDestroy(){//组件销毁前
+            clearInterval(this.timer);
         },
         updated() {//更新数据
         },

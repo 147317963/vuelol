@@ -21,5 +21,7 @@ const api = {
     match:'v1/match',
     //公告
     announcement:'v1/announcement',
+    //获得相关配置
+    config:'v1/config'
 };
 export default api

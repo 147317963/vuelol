@@ -4,6 +4,7 @@
         <form  onsubmit="return false">
             <div   class="base-input">
                 <input  id="帐号" type="text"
+                        v-model="username"
                         placeholder="用户名或手机号"
                         autocomplete="off" autocorrect="off"
                         autocapitalize="off">
@@ -12,22 +13,24 @@
             </div>
             <div   class="base-input">
                 <input  id="密码"
-                        :type="password" placeholder="输入帐户密码"
+                        :type="passShow"  v-model="password" placeholder="输入帐户密码"
                         autocomplete="off" autocorrect="off"
                         autocapitalize="off">
                 <label for="密码" class="input-label">密码</label>
                 <span  class="focus-border"></span> <!---->
-                <div  class="right-icon" :class="password==='password'?'hidden-password':'show-password'"  @click.stop="password==='password'?  password= 'text': password = 'password'"></div>
+                <div  class="right-icon" :class="passShow==='password'?'hidden-password':'show-password'"  @click.stop="passShow==='password'?  passShow= 'text': passShow = 'password'"></div>
             </div>
             <section  class="login-setting">
-                <label class="container"  @click="check=!check">
+                <label class="container"  >
                     <span>记住我</span>
-                <input  type="checkbox"> <span  class="checkmark"></span></label>
+                    <input  type="checkbox" v-model="checked">
+                    <span  class="checkmark"></span>
+                </label>
                 <router-link to="/forgotPassword" class="forgot-pwd">忘记密码</router-link>
             </section>
             <div   class="base-button">
                 <div  class="button-border">
-                    <button  type="submit" class="button-content">登录</button>
+                    <button  type="submit" class="button-content" @click.stop="loginUser">登录</button>
                 </div>
             </div>
             <div  style="height: 4px;"></div>
@@ -38,25 +41,94 @@
                 </div>
             </div>
         </form>
-        <a
-           href="https://www.raycsonline.com/chatwindow.html?siteId=5000342&amp;planId=720" target="_blank"
-           rel="noopener noreferrer" aria-label="customer-service" class="customer-service">
-            联系客服
-        </a></div>
+        <router-link to="/register" class="customer-service">联系客服</router-link>
+    </div>
 </template>
 
 <script>
+    import CryptoJS  from 'crypto-js';
     export default {
         name: "login",
         data() {
             return {
-                password:'password',
-                check:false,
+                username:'',
+                password:'',
+                passShow:'password',
+                checked:false,
             }
         },
         methods: {//条用方法
+            loginUser(){
+                if (!/^[a-zA-Z0-9]{6,16}$/.test(this.username)) {
+                    this.$toast({
+                        message: '帐号由6到16位只能是(字母或数字！)',
+                        duration: 1000,
+                        forbidClick: true
+                    });
+                    return;
+                }
+                if (!/^[a-zA-Z0-9_-]{6,16}$/.test(this.password)) {
+                    this.$toast({
+                        message: '密码由6到16位只能是(字母，数字，下划线，减号！)',
+                        duration: 1000,
+                        forbidClick: true
+                    });
+                    return;
+                }
+                // deviceId= 0b07a868db269792a4528edb81527795 最好带这个数据传输  防止爆破
+                const key = CryptoJS.enc.Utf8.parse('1234567890654321'); //为了避免补位，直接用16位的秘钥
+                const iv = CryptoJS.enc.Utf8.parse('1234567890123456'); //16位初始向量
+                this.$post(this.$api.login,{
+                    username: this.username,
+                    password: CryptoJS.AES.encrypt(this.password,key,{
+                        iv: iv,
+                        mode:CryptoJS.mode.CBC,
+                        padding: CryptoJS.pad.Pkcs7
+                    }).toString(),
+                }).then((res) => {
+                    if(res.code === 200) {
+                        if(this.checked){
+                            localStorage.setItem('username',this.username);
+                            localStorage.setItem('password',this.password);
+                            // this.$Lockr.set('username', this.username); // Saved as string
+                            // this.$Lockr.set('password', this.password); // Saved as string
+                        }else {
+                            localStorage.removeItem('username');
+                            localStorage.removeItem('password');
+                            // this.$Lockr.rm('username');
+                            // this.$Lockr.rm('password');
+                        }
+
+                        localStorage.setItem('token', res.token); //加上过期时间
+
+
+                        //两秒后跳转
+                        if(this.$route.query.redirect){
+                            this.$router.push({path: this.$route.query.redirect})
+                        }else {
+                            this.$router.push({path: '/'})
+                        }
+
+
+
+
+
+
+
+
+                    }
+
+
+                });
+            }
         },
         mounted() {//加载完毕后
+            if(localStorage.getItem('username') && localStorage.getItem('password')){
+                this.username = localStorage.getItem('username',this.username);
+                this.password = localStorage.getItem('password',this.password);
+                this.checked = true;
+            }
+
         },
         beforeCreate() {//初始化前
         },

@@ -1,12 +1,13 @@
 <template>
     <nav class="app-header">
         <ul >
-            <li >
-                <a  href="/personal" class="base-icon" :class="this.$store.state.header ===1 ?'history-back':'personal-info'" aria-label="personal-info"></a>
+            <li :class="[this.$store.state.headerType ===1 ?'base-icon history-back':'']" @click.stop="$store.state.headerType ===1?$router.go(-1):''">
+
+                <router-link v-if="this.$store.state.headerType ===0" to="/personal" class="base-icon personal-info"></router-link>
             </li>
-            <li   :class="this.$store.state.header ===1 ?'':'home-logo'"></li>
-            <li>
-                  <a   href="https://www.raycsonline.com/chatwindow.html?siteId=5000342&amp;planId=720" target="_blank" rel="noopener noreferrer" aria-label="customer-service" class="customer-service base-icon service-link"></a>
+            <li   :class="[this.$store.state.headerType ===0 ?'home-logo':'']"></li>
+            <li   :class="[this.$store.state.headerType ===1 ?'base-icon':'']">
+                  <a v-if="this.$store.state.headerType===0"  href="https://www.raycsonline.com/chatwindow.html?siteId=5000342&amp;planId=720" target="_blank" rel="noopener noreferrer" aria-label="customer-service" class="customer-service base-icon service-link"></a>
             </li>
         </ul>
     </nav>

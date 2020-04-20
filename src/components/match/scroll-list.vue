@@ -54,11 +54,13 @@
             this.$nextTick(() => {
                 this.$get(this.$api.match).then((res) => {
                     //首次进入获得数据
+
                     this.$store.state.match = res.datas;
                     this.$store.state.matchRefresh=false;
                     // _this.matchPost = res.datas;
                     //刷新列表后，重新计算滚动区域高度
                     // _this.upMatch();
+
 
                 });
                 this.scroll = new this.$BScroll(this.$refs.scroll, {       //初始化better-scroll
@@ -75,7 +77,7 @@
                     },
                     pullDownRefresh: {
                         threshold: 50, // 下拉距离超过30px触发pullingDown事件
-                        stop: 50 // 回弹停留在距离顶部20px的位置
+                        stop: 30 // 回弹停留在距离顶部20px的位置
                     },
                     // snap:{
                     //     loop:false,
@@ -94,7 +96,6 @@
 
                 //滑动结束松开事件
                 this.scroll.on('touchEnd', (pos) => {  //上拉刷新
-                    // _this.pulldownMsg = '刷新中..';
                     // _this.scroll.finishPullUp();
                     if (pos.y > 50) {
                         // this.$socket.emit("match",{"asd":"我是内容"});
@@ -115,7 +116,7 @@
                                 //刷新列表后，重新计算滚动区域高度
                                 // this.scroll.refresh();
                             })
-                        }, 1000)
+                        }, 500)
                     }
                 })
             });
@@ -147,7 +148,8 @@
                     this.scroll.refresh();
                     // this.scroll.finishPullUp();
                 })
-            }
+            },
+
             // match: {
             //     handler(val, newval) {
             //         // console.log(val);

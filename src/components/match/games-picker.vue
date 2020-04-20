@@ -14,9 +14,8 @@
 
                 <div   class="vux-checker-item vux-tap-active default-checker-item selected-all-games" v-for="itme  in this.$store.state.gameList" :key="itme['id']">
                     <div  style="height: 2px;">&nbsp;</div>
-                    <div  class="games-info"><img  alt="" class="games-icon"
-                                                   :src="'//www.nmgdjkj.com/'+itme.game_logo"
-                                                   lazy="loaded">
+                    <div  class="games-info">
+                        <img   class="games-icon" v-lazy="'//www.nmgdjkj.com/'+itme.game_logo">
                         <div >{{itme.game_name}}</div>
                     </div>
                     <div  class="selected-checker-light"></div>
@@ -42,21 +41,21 @@
             }
         },
         methods: {//条用方法
-            getGameList(){
-                this.$nextTick(() => {
-
-                    this.$get(this.$api.game).then(res => {
-                        if(res.code === 200){
-                            this.$store.state.gameList = res.datas;
-                            // this.gameList = res.datas;
-
-                        }
-
-                    });
-                });
-
-
-            },
+            // getGameList(){
+            //     this.$nextTick(() => {
+            //
+            //         this.$get(this.$api.game).then(res => {
+            //             if(res.code === 200){
+            //                 this.$store.state.gameList = res.datas;
+            //                 // this.gameList = res.datas;
+            //
+            //             }
+            //
+            //         });
+            //     });
+            //
+            //
+            // },
             setScroll() {
                 this.$nextTick(() => {
                     if(this.scroll){
@@ -80,7 +79,7 @@
 
         },
         mounted() {//加载完毕后
-            this.getGameList();
+            // this.getGameList();
 
         },
         beforeCreate() {//初始化前

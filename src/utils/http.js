@@ -5,6 +5,7 @@ import QS from 'qs'; // 引入qs模块，用来序列化post类型的数据，�
 import {Toast} from 'vant';
 import Vue from "vue";
 import VueSocketIO from 'vue-socket.io' //webSocket
+// import socketio from 'socket.io-client';
 
 
 // 环境的切换
@@ -26,13 +27,43 @@ axios.defaults.timeout = 10000;
 // post请求头
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 
+//定义完路由后，我们主要是利用vue-router提供的钩子函数beforeEach()对路由进行判断。
+router.beforeEach((to, from, next) => {
+    //判断该路由是否需要验证
+    if(to.meta.requireAuth){
+        //是否有token
+        if(localStorage.token){
+            //有就直接可以访问
+            next();
+
+        }else {
+            //没有就跳转到登录界面
+            next({
+                path: '/login',
+                query: {redirect: to.fullPath}  // 将跳转的路由path作为参数，登录成功后跳转到该路由
+            })
+        }
+    }else {
+        //不需要登录验证直接给与同行
+        next();
+    }
+
+
+});
 
 // 请求拦截器
 axios.interceptors.request.use(
     config => {
         // 每次发送请求之前判断是否存在token，如果存在，则统一在http请求的header都加上token，不用每次请求都手动添加了
         // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断
-
+        if (localStorage.token) { //判断token是否存在
+            config.params = {
+                // rd: Date.parse(new Date()),
+                token:localStorage.token,//将token设置成请求头
+                ...config.params,
+            };
+            // config.headers.Authorization = localStorage.token;  //将token设置成请求头
+        }
         if(config.method==='post'){
              Toast.loading({
                 message: '加载中...',
@@ -42,7 +73,7 @@ axios.interceptors.request.use(
         return config;
     },
     error => {
-        return Promise.error(error);
+        return Promise.reject(error);
 
     });
 
@@ -99,6 +130,7 @@ axios.interceptors.response.use(
                     break;
                 // 其他错误，直接抛出错误提示
                 default:
+                    //错误提示返回500状态码
                     Toast({
                         message: response.data.message,
                         duration: 1500,
@@ -127,23 +159,7 @@ axios.interceptors.response.use(
     }
 
 );
-router.beforeEach((to, from, next) => {
-    // 判断当前路由以及路由的父路由中是否包含meta，meta里是否有requiredAuth
-    // to.matched中包含当前路由以及父路由
-    // 如果判断出to.matched中某个路由里有meta.requiredAuth
-    // console.log(to);
 
-    if (to.matched[0]) {
-
-        next()
-
-    } else {
-        //没有该URL 就跳转到首页
-        next({
-            path:'/'
-        })
-    }
-});
 
 /**
  * get方法，对应get请求

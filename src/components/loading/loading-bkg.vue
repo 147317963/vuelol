@@ -46,7 +46,7 @@
         z-index: 9998;
         top: 0;
         left: 0;
-        background: rgba(0,0,0,.6);
+        /*background: rgba(0,0,0,.6);*/
     }
 
     .home-page .loading-bkg {

@@ -1,42 +1,4 @@
 <template>
-    <div class="keyboard-item">
-        <div class="bet-keyboard">
-            <section class="content">
-                <div class="content__btn--number">1
-                </div>
-                <div class="content__btn--number">2
-                </div>
-                <div class="content__btn--number">3
-                </div>
-                <div class="content__btn--number">4
-                </div>
-                <div class="content__btn--number">5
-                </div>
-                <div class="content__btn--number">6
-                </div>
-                <div class="content__btn--number">7
-                </div>
-                <div class="content__btn--number">8
-                </div>
-                <div class="content__btn--number">9
-                </div>
-                <div class="content__btn--number">0
-                </div>
-            </section>
-            <section class="content">
-                <div class="content__btn--betMax">
-                    <div>最大投注</div>
-                    <div class="limit-stake">3000</div>
-                </div>
-                <div class="content__btn--delete"><i
-                        class="delete-icon"></i>
-                </div>
-                <div class="content__btn--confirm">
-                    <div>确认</div>
-                </div>
-            </section>
-        </div>
-    </div>
 </template>
 
 <script>

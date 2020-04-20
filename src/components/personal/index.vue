@@ -56,7 +56,7 @@
                 </div> <!----></div>
             <div ><!---->
                 <div class="weui-cells vux-no-group-title">
-                    <div  class="weui-cell vux-tap-active weui-cell_access" @click="$router.push({name:'bettingRules'})">
+                    <div  class="weui-cell vux-tap-active weui-cell_access" @click.stop="$router.push({path:'/bettingRules'})">
                         <div class="weui-cell__hd">
                             <div  class="base-icon rule-icon"></div>
                         </div>
@@ -64,7 +64,7 @@
                                 class="vux-label-desc"></span></div>
                         <div class="weui-cell__ft">  <!----></div>
                     </div>
-                    <div  class="weui-cell vux-tap-active weui-cell_access" @click="$router.push({name:'about'})">
+                    <div  class="weui-cell vux-tap-active weui-cell_access" @click.stop="$router.push({path:'/about'})">
 
                             <div class="weui-cell__hd">
                                 <div  class="base-icon about-icon"></div>

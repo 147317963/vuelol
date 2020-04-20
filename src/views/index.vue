@@ -25,11 +25,22 @@
             }
         },
         methods: {//条用方法
+            getGameList() {
+                this.$nextTick(() => {
 
+                    this.$get(this.$api.game).then(res => {
+                        if (res.code === 200) {
+                            this.$store.state.gameList = res.datas;
+                            // this.gameList = res.datas;
 
+                        }
+
+                    });
+                });
+            }
         },
         mounted() {//加载完毕后
-
+            this.getGameList();
         },
         beforeCreate() {//初始化前
         },
