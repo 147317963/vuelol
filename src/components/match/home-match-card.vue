@@ -4,7 +4,7 @@
         <div class="home-match-card" v-for="(item, index)  in this.$store.state.match" :key="index" @click.stop="">
             <section class="card-header">
 <!--                游戏logo-->
-                <img style="width: 20px"    v-lazy="'//www.nmgdjkj.com/'+$store.state.gameList[_.findIndex($store.state.gameList,function(o) { return o.id == item['game_id']})]['game_logo']" >
+                <img style="width: 20px"    v-lazy="'//www.nmgdjkj.com/'+$store.state.gameList[_.findIndex($store.state.gameList,o=> o.id == item['game_id'])]['game_logo']" >
 <!--                跳转到当前赛季列表-->
                 <div class="tournament-name"   @click.stop="$router.push({path:'/login',query:{id:item['tournament_id']}})">
                     {{item.tournament_name}}
@@ -47,7 +47,7 @@
             </div>
             <section class="card-footer">
                 <div class="card-odds-btn">
-                    <div class="match-card-button"  @click.stop="isActive(item['odds'])"
+                    <div class="match-card-button"  @click.stop="isActive(item['odds'][0])"
                          :class="[setClass(item,0,1),setClass(item,0,2),setClass(item,0,3)]">
                         <div class="button-dark-border">
                             <div class="button-content">
@@ -104,20 +104,21 @@
             return {}
         },
         methods: {//条用方法
-            isActive:function(item){
+            isActive:(item)=>{
                 //方法1
                 if(typeof item.checked == 'undefined') {
                     //全局创建
                     //Vue.set(item,'checked',true);
                     //局部创建
-                    this.$set(item,'checked',true);
+                    // this.$set(item,'checked',true);
+                    item.checked=true;
                     // console.log(item.text)
 
                 }else{
                     item.checked = !item.checked;
                 }
                 //方法2
-                this.$set(item,'checked',!item.checked);
+                // this.$set(item,'checked',!item.checked);
             },
             // momentDiff(item, class1, class2) {
             //     return moment(item).diff(moment()) <= 0 ? class1 : class2;
@@ -126,7 +127,7 @@
             //     return moment(item).diff(moment());
             // },
 
-            setOdds(value, key) {
+            setOdds:(value, key)=> {
                 if (Object.prototype.hasOwnProperty.call (value,'odds')) {
                     if (Object.prototype.hasOwnProperty.call (value['odds'],key)) {
                         return value['odds'][key]['odds'];
@@ -136,7 +137,7 @@
                 return '';
             },
 
-            setClass(value, key, type) {
+            setClass:(value, key, type)=> {
                 //是否有赔率
                 if (type === 1) {
                     return   Object.prototype.hasOwnProperty.call (value,'odds') ? '' : 'btn-over'
@@ -190,10 +191,10 @@
         components: {//注册组件
         },
         watch: {
-            //data(val, newval) {
-            //console.log(val)
-            //console.log(newval)
-            //}
+            // data:(val, newval)=> {
+            // console.log(val)
+            // console.log(newval)
+            // }
         }
     }
 </script>

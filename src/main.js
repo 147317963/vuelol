@@ -12,6 +12,7 @@ import 'vant/lib/index.css';
 import _ from 'lodash';//数字插件
 import moment from "moment";//时间插件
 import VueLazyload from 'vue-lazyload' //图片懒加载
+// import VueTouch from 'vue-touch'  //左右滑动插件
 // import objectAssign from 'object-assign' //合并数组用的
 // import VueSocketIO from 'vue-socket.io' //webSocket
 // import SocketIO from "socket.io-client"
@@ -20,6 +21,7 @@ import '@/assets/css/animate.css';
 
 Vue.config.productionTip = false;
 // Vue.prototype.$Lockr =Lockr;
+// Vue.use(VueTouch,{name:'v-touch'});
 Vue.prototype.$BScroll = BScroll;
 Vue.prototype.$TweenLite = TweenLite;
 Vue.prototype.moment= moment;

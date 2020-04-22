@@ -86,7 +86,8 @@
                         padding: CryptoJS.pad.Pkcs7
                     }).toString(),
                 }).then((res) => {
-                    if(res.code === 200) {
+                    console.log(res);
+                    if(res.data.code === 200) {
                         if(this.checked){
                             localStorage.setItem('username',this.username);
                             localStorage.setItem('password',this.password);
@@ -99,9 +100,9 @@
                             // this.$Lockr.rm('password');
                         }
 
-                        localStorage.setItem('token', res.token); //加上过期时间
+                        localStorage.setItem('token', res.data.token); //加上过期时间
 
-
+                        console.log(this.$route.query.redirect);
                         //两秒后跳转
                         if(this.$route.query.redirect){
                             this.$router.push({path: this.$route.query.redirect})
@@ -123,9 +124,11 @@
             }
         },
         mounted() {//加载完毕后
+
+
             if(localStorage.getItem('username') && localStorage.getItem('password')){
-                this.username = localStorage.getItem('username',this.username);
-                this.password = localStorage.getItem('password',this.password);
+                this.username = localStorage.username;
+                this.password = localStorage.password;
                 this.checked = true;
             }
 

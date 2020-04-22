@@ -1,28 +1,29 @@
 <template>
 <!--    <collapse-transition>-->
     <transition mode="out-in" enter-active-class="animated fadeInDown" leave-active-class="animated fadeOutUp">
-        <div class="vux-popup-dialog games-picker vux-popup-top vux-popup-show" v-show="this.$store.state.gameListShow===true" ref="scroll">
-            <div  class="vux-checker-box checker-content">
-                <div  class="default-checker-item selected-checker-item">
-<!--                    <div  style="height: 2px;">&nbsp;</div>-->
-                    <div  class="games-info">
-                        <div  class="games-icon all-games-icon"></div>
-                        <div >全部</div>
-                    </div>
-                    <div  class="selected-checker-light"></div>
-                </div>
 
-                <div   class="vux-checker-item vux-tap-active default-checker-item selected-all-games" v-for="itme  in this.$store.state.gameList" :key="itme['id']">
-                    <div  style="height: 2px;">&nbsp;</div>
-                    <div  class="games-info">
-                        <img   class="games-icon" v-lazy="'//www.nmgdjkj.com/'+itme.game_logo">
-                        <div >{{itme.game_name}}</div>
+            <div class="vux-popup-dialog games-picker vux-popup-top vux-popup-show" v-show="this.$store.state.gameListShow===true"  ref="scroll">
+                <div  class="vux-checker-box checker-content">
+                    <div  class="default-checker-item selected-checker-item">
+                        <!--                    <div  style="height: 2px;">&nbsp;</div>-->
+                        <div  class="games-info">
+                            <div  class="games-icon all-games-icon"></div>
+                            <div >全部</div>
+                        </div>
+                        <div  class="selected-checker-light"></div>
                     </div>
-                    <div  class="selected-checker-light"></div>
-                </div>
 
+                    <div   class="vux-checker-item vux-tap-active default-checker-item selected-all-games" v-for="itme  in this.$store.state.gameList" :key="itme['id']">
+                        <div  style="height: 2px;">&nbsp;</div>
+                        <div  class="games-info">
+                            <img   class="games-icon" v-lazy="'//www.nmgdjkj.com/'+itme.game_logo">
+                            <div >{{itme.game_name}}</div>
+                        </div>
+                        <div  class="selected-checker-light"></div>
+                    </div>
+
+                </div>
             </div>
-        </div>
     </transition>
 
 <!--    </collapse-transition>-->
@@ -58,6 +59,8 @@
             // },
             setScroll() {
                 this.$nextTick(() => {
+
+
                     if(this.scroll){
                         this.scroll.destroy();
                     }
@@ -71,7 +74,7 @@
                                 fade: true,
                                 interactive: false // 1.8.0 新增
                             },
-                            click: false,
+                            click: true,
                         });
                     }, 100);
                 });

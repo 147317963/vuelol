@@ -29,10 +29,12 @@ Vue.use(VueRouter);
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/index.vue'),
+    keepAlive: true,//是否刷新页面
     meta: { // 在路由配置中加入meta:{requireAuth: true}
       requireAuth: false //false 不需要登录权限
-    }
-  },
+    },
+
+    },
   // {
   //   path: '/about',
   //   name: 'About',
@@ -96,7 +98,7 @@ Vue.use(VueRouter);
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ '../components/personal/index.vue'),
+      component: () => import(/* webpackChunkName: "about" */ '../components/personal/personal.vue'),
       meta: { // 在路由配置中加入meta:{requireAuth: true}
         requireAuth: true  //true 需要登录权限
       }

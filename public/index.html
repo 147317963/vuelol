@@ -1,23 +1,29 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-  <head>
+<html lang="utf-8">
+<head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="format-detection" content="telephone=no">
     <meta name="screen-orientation" content="portrait">
     <meta name="wap-font-scale" content="no">
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title><%= htmlWebpackPlugin.options.title %></title>
-  </head>
-  <body>
+    <!--    <link rel="icon" href="<%= BASE_URL %>favicon.ico">-->
+    <link rel="icon" type="image/png" sizes="32x32" href="<%= BASE_URL %>favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="<%= BASE_URL %>favicon-16x16.png">
+    <meta name="description"
+          content="RAYBET雷竞技是一家专注于电竞竞猜的平台,为电竞玩家提供最佳的即时投注（滚球）体验，即时投注（滚球）盘口涵盖所有赛事。提供包含DOTA2、英雄联盟（LOL）、CS:GO、王者荣耀、绝地求生(PUBG)等数十款电子竞技游戏赛事竞猜。">
+    <meta name="keywords" content="电竞竞猜，电竞投注，电竞外围，电竞滚球，电竞菠菜，Dota2竞猜，英雄联盟竞猜，lol竞猜，王者荣耀竞猜，csgo竞猜。">
+    <title>RAYBET雷竞技-最佳电子竞技即时竞猜平台。</title>
+</head>
 
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-    <script type="text/javascript">//如果当前应用是APP应用就去改写一下配置文件
-     document.addEventListener('gesturestart', function (event) {
-       event.preventDefault()
-     })
-   </script>
-  </body>
+<body>
+
+<div id="app"></div>
+<!-- built files will be auto injected -->
+<script type="text/javascript">//如果当前应用是APP应用就去改写一下配置文件
+document.addEventListener('gesturestart', function (event) {
+    event.preventDefault()
+})
+</script>
+</body>
 </html>

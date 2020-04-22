@@ -30,7 +30,7 @@
             this.$nextTick(() => {
                 this.$get(this.$api.announcement).then((res) => {
                     //刷新数据
-                    this.$store.state.announcement = res.datas;
+                    this.$store.state.announcement = res.data.datas;
                     // _this.matchPost = res.datas;
                     //刷新列表后，重新计算滚动区域高度
                     // _this.upMatch();

@@ -6,7 +6,7 @@
                     <div  class="weui-cell user-name" style="height: 113px;">
                         <div class="weui-cell__hd"></div>
                         <div class="vux-cell-bd vux-cell-primary"><p><label class="vux-label">早上好</label></p> <span
-                                class="vux-label-desc">zhuxinyuan</span></div>
+                                class="vux-label-desc">{{this.$store.state.user.username}}</span></div>
                         <div class="weui-cell__ft">  <!----></div>
                     </div>
                     <div  class="weui-cell vux-tap-active weui-cell_access">
@@ -16,7 +16,7 @@
                         <div class="vux-cell-bd vux-cell-primary"><p><label class="vux-label">钱包</label></p> <span
                                 class="vux-label-desc"></span></div>
                         <div class="weui-cell__ft"><p  class="wallet-lebal"><span >余额</span>
-                            <span  class="wallet-lebal-balance">&nbsp;¥ 0.00</span></p> <!----></div>
+                            <span  class="wallet-lebal-balance">&nbsp;¥ {{this.$store.state.user.money}}</span></p> <!----></div>
                     </div>
                 </div> <!----></div>
             <div ><!---->
@@ -60,8 +60,10 @@
                         <div class="weui-cell__hd">
                             <div  class="base-icon rule-icon"></div>
                         </div>
-                        <div class="vux-cell-bd vux-cell-primary"><p><label class="vux-label">投注规则</label></p> <span
-                                class="vux-label-desc"></span></div>
+                        <div class="vux-cell-bd vux-cell-primary" @click.stop="$router.push({path:'/bettingRules'})">
+                            <p><label class="vux-label">投注规则</label></p>
+                            <span class="vux-label-desc"></span>
+                        </div>
                         <div class="weui-cell__ft">  <!----></div>
                     </div>
                     <div  class="weui-cell vux-tap-active weui-cell_access" @click.stop="$router.push({path:'/about'})">
@@ -69,13 +71,14 @@
                             <div class="weui-cell__hd">
                                 <div  class="base-icon about-icon"></div>
                             </div>
-                            <div class="vux-cell-bd vux-cell-primary"><p><label class="vux-label">关于</label></p> <span
-                                    class="vux-label-desc"></span></div>
+                            <div class="vux-cell-bd vux-cell-primary">
+                                <p><label class="vux-label">关于</label></p>
+                                <span class="vux-label-desc"></span>
+                            </div>
                             <div class="weui-cell__ft">  <!----></div>
-
-
                     </div>
-                </div> <!----></div>
+                </div> <!---->
+            </div>
         </section>
         <section  class="button-group">
             <a  href="/personal/referral" class="button">
@@ -92,6 +95,8 @@
 </template>
 
 <script>
+    import CryptoJS from "crypto-js";
+
     export default {
         name: "personal",
         data() {
@@ -100,6 +105,17 @@
         methods: {//条用方法
         },
         mounted() {//加载完毕后
+            this.$nextTick(() => {
+                this.$post(this.$api.user).then((res) => {
+                    //首次进入获得数据
+                    this.$store.state.user = res.data.datas;
+                    // _this.matchPost = res.datas;
+                    //刷新列表后，重新计算滚动区域高度
+                    // _this.upMatch();
+
+
+                });
+            })
         },
         beforeCreate() {//初始化前
         },

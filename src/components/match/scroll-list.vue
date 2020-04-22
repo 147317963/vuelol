@@ -6,7 +6,7 @@
                 <div class="__refresh" style="margin-top: -50px">
                     <div class="refresh-text">{{pulldownMsg}}</div>
                 </div>
-                <home-match-card></home-match-card>
+                    <home-match-card></home-match-card>
                 <div class="empty-list" style="display: none">
                     选手正在赛前准备，请耐心等候...
                     <div class="base-button empty-btn button--dark">
@@ -43,7 +43,9 @@
             }
         },
         methods: {//条用方法
+            swipeup(){
 
+            }
 
 
 
@@ -54,8 +56,7 @@
             this.$nextTick(() => {
                 this.$get(this.$api.match).then((res) => {
                     //首次进入获得数据
-
-                    this.$store.state.match = res.datas;
+                    this.$store.state.match = res.data.datas;
                     this.$store.state.matchRefresh=false;
                     // _this.matchPost = res.datas;
                     //刷新列表后，重新计算滚动区域高度
@@ -64,20 +65,21 @@
 
                 });
                 this.scroll = new this.$BScroll(this.$refs.scroll, {       //初始化better-scroll
-                    probeType: 2,   //1 滚动的时候会派发scroll事件，会截流。2滚动的时候实时派发scroll事件，不会截流。 3除了实时派发scroll事件，在swipe的情况下仍然能实时派发scroll事件
+                    probeType: 3,   //1 滚动的时候会派发scroll事件，会截流。2滚动的时候实时派发scroll事件，不会截流。 3除了实时派发scroll事件，在swipe的情况下仍然能实时派发scroll事件
                     click: true,   //是否派发click事件
                     mouseWheel: true,
+                    // startX: 0,
                     tap: true,
                     scrollY: true,
                     scrollX: false,
-                    // bounce: false,
+                    // eventPassthrough: 'vertical',
                     scrollbar: {
                         fade: true,
                         interactive: false // 1.8.0 新增
                     },
                     pullDownRefresh: {
                         threshold: 50, // 下拉距离超过30px触发pullingDown事件
-                        stop: 30 // 回弹停留在距离顶部20px的位置
+                        stop: 50 // 回弹停留在距离顶部20px的位置
                     },
                     // snap:{
                     //     loop:false,
@@ -96,52 +98,29 @@
 
                 //滑动结束松开事件
                 this.scroll.on('touchEnd', (pos) => {  //上拉刷新
-                    // _this.scroll.finishPullUp();
                     if (pos.y > 50) {
-                        // this.$socket.emit("match",{"asd":"我是内容"});
                         setTimeout(() => {
                             this.$get(this.$api.match).then((res) => {
-                                // console.log(res);
                                 //刷新数据
-                                // _this.matchZl(res.datas);
-                                this.$store.state.match = res.datas;
-                                // console.log(moment(_this.match[0]['start_time']).diff(moment()));
+                                this.$store.state.match = res.data.datas;
                                 //恢复刷新提示文本值
                                 this.pulldownMsg = '下拉刷新';
                                 this.$store.state.matchRefresh=false;
                                 // 事情做完，需要调用此方法告诉 better-scroll 数据已加载，否则下拉事件只会执行一次
                                 this.scroll.finishPullDown();
-                                //刷新成功后提示
-                                // _this.refreshalert();
-                                //刷新列表后，重新计算滚动区域高度
-                                // this.scroll.refresh();
                             })
                         }, 500)
                     }
                 })
-            });
 
-            // setInterval(() => {
-            //     this.postListener()
-            // }, 8000)
+
+            });
 
         },
         beforeCreate() {//初始化前
         },
         updated() {//更新数据
         },
-        // sockets: {
-        //     connect() {
-        //         console.log('socket connected');
-        //         // this.$socket.emit();
-        //         // this.$socket.emit("match",{"asd":"我是内容"})
-        //
-        //         // this.$socket.on("match",function(res){
-        //         //     console.log(res)
-        //         // });
-        //
-        //     }
-        // },
         watch: {
             '$store.state.match'() {
                 this.$nextTick(() => {
@@ -149,19 +128,14 @@
                     // this.scroll.finishPullUp();
                 })
             },
-
-            // match: {
-            //     handler(val, newval) {
-            //         // console.log(val);
-            //         // console.log(newval);
-            //     },
-            //     deep: true
-            // },
         }
     }
 </script>
 
 <style scoped>
+    .v-touch{
+        touch-action: pan-y!important;
+    }
     .home-page .scroll-list {
         height: calc(100% - 36px);
         /*padding-left: 8px;*/

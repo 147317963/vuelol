@@ -45,20 +45,20 @@
           data['odds'].forEach((item) => {
 
             //  匹配的创建的赛事ID索引
-            const matchIndex = _.findIndex(this.$store.state.match,function(o) {
+            const matchIndex = _.findIndex(this.$store.state.match,(o)=> {
               return o.id == item['match_id']
             });
             //找不到匹配场次
             if(matchIndex==-1) return;
 
-            const oddsIndex = _.findIndex(this.$store.state.match[matchIndex]['odds'],function(o) {
+            const oddsIndex = _.findIndex(this.$store.state.match[matchIndex]['odds'],(o)=> {
               return o.id == item['id']
             });
             //找不到该赔率
             if(oddsIndex==-1) return;
 
 
-            this.$store.state.match[matchIndex]['odds'][oddsIndex]['status']=item['status'];
+
             if (Number(this.$store.state.match[matchIndex]['odds'][oddsIndex]['odds']) > Number(item['odds'])) {
 
               this.$store.state.match[matchIndex]['odds'][oddsIndex]['tag'] = 'btn-odds-dropping';
@@ -75,14 +75,31 @@
                 this.$store.state.match[matchIndex]['odds'][oddsIndex]['tag'] = ''
               }, 6000);
             }
-            this.$store.state.match[matchIndex]['odds'][oddsIndex]['odds'] = item['odds'];
-            this.$TweenLite.to(this.$store.state.match[matchIndex]['odds'][oddsIndex], 0.3, {odds: item['odds']});
+
+            //合并数组
+            this.$store.state.match[matchIndex]['odds'][oddsIndex] = Object.assign(this.$store.state.match[matchIndex]['odds'][oddsIndex], item);
+
+
+
+            // this.$TweenLite.to(this.$store.state.match[matchIndex]['odds'][oddsIndex], 0.3, {odds: item['odds']});
             console.log(matchIndex,oddsIndex);
 
 
 
 
           })
+          //更新比赛状态
+        }else if(data['source']==='match'){
+          //  匹配的创建的赛事ID索引
+          const matchIndex = _.findIndex(this.$store.state.match,(o)=> {
+            return o.id == item['match_id']
+          });
+          //找不到匹配场次
+          if(matchIndex==-1) return;
+
+          //合并数组
+          this.$store.state.match[matchIndex] = Object.assign(this.$store.state.match[matchIndex], item);
+
         }
 
 

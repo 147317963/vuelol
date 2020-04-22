@@ -151,6 +151,8 @@ const store = new Vuex.Store({
         ],
         //比赛列表
         match: [],
+        //用户信息
+        user:[],
         //公告列表
         announcement: [],
         //下注显示按钮

@@ -22,6 +22,8 @@ const api = {
     //公告
     announcement:'v1/announcement',
     //获得相关配置
-    config:'v1/config'
+    config:'v1/config',
+    //获得用户信息
+    user:'v1/user'
 };
 export default api
