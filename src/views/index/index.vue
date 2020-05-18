@@ -17,6 +17,7 @@
     import LoadingBkg from '@/components/loading/loading-bkg'
     import MatchTab from '@/components/match/match-tab'
     import GamesPicker from '@/components/match/games-picker'
+    import ResizeMixin from '@/utils/ResizeHandler'
     export default {
         name: "index",
         data() {
@@ -25,22 +26,10 @@
             }
         },
         methods: {//条用方法
-            getGameList() {
-                this.$nextTick(() => {
 
-                    this.$get(this.$api.game).then(res => {
-                        if (res.code === 200) {
-                            this.$store.state.gameList = res.datas;
-                            // this.gameList = res.datas;
-
-                        }
-
-                    });
-                });
-            }
         },
         mounted() {//加载完毕后
-            this.getGameList();
+
         },
         beforeCreate() {//初始化前
         },
@@ -53,6 +42,7 @@
             'scroll-list': ScrolLlist,
             'loading-bkg': LoadingBkg,
         },
+        mixins: [ResizeMixin],
         watch: {
             //data(val, newval) {
             //console.log(val)
