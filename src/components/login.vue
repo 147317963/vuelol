@@ -4,7 +4,7 @@
         <form  onsubmit="return false">
             <div   class="base-input">
                 <input  id="帐号" type="text"
-                        v-model="username"
+                        v-model="loginForm.username"
                         placeholder="用户名或手机号"
                         autocomplete="off" autocorrect="off"
                         autocapitalize="off">
@@ -13,7 +13,7 @@
             </div>
             <div   class="base-input">
                 <input  id="密码"
-                        :type="passShow"  v-model="password" placeholder="输入帐户密码"
+                        :type="passShow"  v-model="loginForm.password" placeholder="输入帐户密码"
                         autocomplete="off" autocorrect="off"
                         autocapitalize="off">
                 <label for="密码" class="input-label">密码</label>
@@ -23,14 +23,14 @@
             <section  class="login-setting">
                 <label class="container"  >
                     <span>记住我</span>
-                    <input  type="checkbox" v-model="checked">
+                    <input  type="checkbox" v-model="loginForm.checked">
                     <span  class="checkmark"></span>
                 </label>
                 <router-link to="/forgotPassword" class="forgot-pwd">忘记密码</router-link>
             </section>
             <div   class="base-button">
                 <div  class="button-border">
-                    <button  type="submit" class="button-content" @click.stop="loginUser">登录</button>
+                    <button  type="submit" class="button-content" @click.stop="handleLogin">登录</button>
                 </div>
             </div>
             <div  style="height: 4px;"></div>
@@ -46,19 +46,21 @@
 </template>
 
 <script>
-    import CryptoJS  from 'crypto-js';
     export default {
         name: "login",
         data() {
             return {
-                username:'',
-                password:'',
+                loginForm:{
+                    username:'',
+                    password:'',
+                    checked:false,
+                },
                 passShow:'password',
-                checked:false,
+
             }
         },
         methods: {//条用方法
-            loginUser(){
+            handleLogin(){
                 if (!/^[a-zA-Z0-9]{6,16}$/.test(this.username)) {
                     this.$toast({
                         message: '帐号由6到16位只能是(字母或数字！)',
@@ -75,52 +77,13 @@
                     });
                     return;
                 }
-                // deviceId= 0b07a868db269792a4528edb81527795 最好带这个数据传输  防止爆破
-                const key = CryptoJS.enc.Utf8.parse('1234567890654321'); //为了避免补位，直接用16位的秘钥
-                const iv = CryptoJS.enc.Utf8.parse('1234567890123456'); //16位初始向量
-                this.$post(this.$api.login,{
-                    username: this.username,
-                    password: CryptoJS.AES.encrypt(this.password,key,{
-                        iv: iv,
-                        mode:CryptoJS.mode.CBC,
-                        padding: CryptoJS.pad.Pkcs7
-                    }).toString(),
-                }).then((res) => {
-                    console.log(res);
-                    if(res.data.code === 200) {
-                        if(this.checked){
-                            localStorage.setItem('username',this.username);
-                            localStorage.setItem('password',this.password);
-                            // this.$Lockr.set('username', this.username); // Saved as string
-                            // this.$Lockr.set('password', this.password); // Saved as string
-                        }else {
-                            localStorage.removeItem('username');
-                            localStorage.removeItem('password');
-                            // this.$Lockr.rm('username');
-                            // this.$Lockr.rm('password');
-                        }
-
-                        localStorage.setItem('token', res.data.token); //加上过期时间
-
-                        console.log(this.$route.query.redirect);
-                        //两秒后跳转
-                        if(this.$route.query.redirect){
-                            this.$router.push({path: this.$route.query.redirect})
-                        }else {
-                            this.$router.push({path: '/'})
-                        }
-
-
-
-
-
-
-
-
-                    }
-
-
+                this.$store.dispatch("user/login", this.loginForm).then(() => {
+                    const routerPath = this.redirect === "/404" ? "/" : this.redirect;
+                    this.$router.push({ path: routerPath || "/" });
                 });
+
+
+
             }
         },
         mounted() {//加载完毕后
@@ -140,10 +103,12 @@
         components: {//注册组件
         },
         watch: {
-            //data(val, newval) {
-            //console.log(val)
-            //console.log(newval)
-            //}
+            $route: {
+                handler: (route)=> {
+                    this.redirect = route.query && route.query.redirect
+                },
+                immediate: true
+            }
         }
     }
 </script>
@@ -165,7 +130,7 @@
         width: 140px;
         height: 140px;
         background-size: cover;
-        background-image: url('../assets/images/svg/login_logo.svg');
+        background-image: url('@/assets/images/svg/login_logo.svg');
     }
     .login-page form {
         width: calc(100% - 48px);
@@ -234,10 +199,10 @@
         right: 0;
     }
     .hidden-password {
-        background-image: url("../assets/images/svg/hidden_password.svg");
+        background-image: url("@/assets/images/svg/hidden_password.svg");
     }
     .show-password {
-        background-image: url("../assets/images/svg/show_password.svg");
+        background-image: url("@/assets/images/svg/show_password.svg");
     }
     .login-page .login-setting {
         width: 100%;

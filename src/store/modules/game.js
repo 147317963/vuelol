@@ -4,6 +4,7 @@ import { getList } from '@/api/game'
 const state = {
     gameImgUrl:'//www.nmgdjkj.com',
     gameList:[],
+    gameMenuShow:false,//游戏菜单列表
 
 }
 const mutations = {
@@ -15,10 +16,13 @@ const mutations = {
         }
         state.gameList = listNew;
 
+    },
+    SET_GAME_MENU_SHOW:(state, show)=>{
+        state.gameMenuShow = show;
     }
 }
 const actions = {
-    getList({ commit }) {
+    getGameList({ commit }) {
         return new Promise((resolve,reject) => {
             getList().then(res => {
                 const {result} = res.data
@@ -28,7 +32,11 @@ const actions = {
                 reject(e)
             })
         })
-    }
+    },
+    setGameMenuShow({ commit }, show) {
+        console.log(show);
+        commit('SET_GAME_MENU_SHOW', show)
+    },
 }
 export default {
     namespaced: true,

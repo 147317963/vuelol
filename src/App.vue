@@ -45,13 +45,13 @@
           data['odds'].forEach((item) => {
 
             //  匹配的创建的赛事ID索引
-            const matchIndex = _.findIndex(this.$store.state.match,(o)=> {
+            const matchIndex = _.findIndex(this.$store.getters.matchList,(o)=> {
               return o.id == item['match_id']
             });
             //找不到匹配场次
             if(matchIndex==-1) return;
 
-            const oddsIndex = _.findIndex(this.$store.state.match[matchIndex]['odds'],(o)=> {
+            const oddsIndex = _.findIndex(this.$store.getters.matchList[matchIndex]['odds'],(o)=> {
               return o.id == item['id']
             });
             //找不到该赔率
@@ -59,25 +59,25 @@
 
 
 
-            if (Number(this.$store.state.match[matchIndex]['odds'][oddsIndex]['odds']) > Number(item['odds'])) {
+            if (Number(this.$store.getters.matchList[matchIndex]['odds'][oddsIndex]['odds']) > Number(item['odds'])) {
 
-              this.$store.state.match[matchIndex]['odds'][oddsIndex]['tag'] = 'btn-odds-dropping';
+              this.$store.getters.matchList[matchIndex]['odds'][oddsIndex]['tag'] = 'btn-odds-dropping';
               // _.throttle(()=>{
               //     this.$store.state.match[mindex]['odds'][oindex]['tag'] = ''
               // },6000);
               setTimeout(() => {
-                this.$store.state.match[matchIndex]['odds'][oddsIndex]['tag'] = ''
+                this.$store.getters.matchList[matchIndex]['odds'][oddsIndex]['tag'] = ''
               }, 6000);
-            } else if (Number(this.$store.state.match[matchIndex]['odds'][oddsIndex]['odds']) < Number(item['odds'])) {
+            } else if (Number(this.$store.getters.matchList[matchIndex]['odds'][oddsIndex]['odds']) < Number(item['odds'])) {
 
-              this.$store.state.match[matchIndex]['odds'][oddsIndex]['tag'] = 'btn-odds-rising';
+              this.$store.getters.matchList[matchIndex]['odds'][oddsIndex]['tag'] = 'btn-odds-rising';
               setTimeout(() => {
-                this.$store.state.match[matchIndex]['odds'][oddsIndex]['tag'] = ''
+                this.$store.getters.matchList[matchIndex]['odds'][oddsIndex]['tag'] = ''
               }, 6000);
             }
 
             //合并数组
-            this.$store.state.match[matchIndex]['odds'][oddsIndex] = Object.assign(this.$store.state.match[matchIndex]['odds'][oddsIndex], item);
+            this.$store.getters.matchList[matchIndex]['odds'][oddsIndex] = Object.assign(this.$store.getters.matchList[matchIndex]['odds'][oddsIndex], item);
 
 
 

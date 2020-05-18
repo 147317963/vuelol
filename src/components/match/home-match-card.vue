@@ -1,10 +1,10 @@
 <template>
     <transition name="fade">
-    <div style="padding-left: 8px;padding-right: 8px;" v-show="!this.$store.state.matchRefresh">
-        <div class="home-match-card" v-for="(item, index)  in this.$store.state.match" :key="index" @click.stop="">
+    <div style="padding-left: 8px;padding-right: 8px;" v-show="this.$store.getters.matchRefresh===false">
+        <div class="home-match-card" v-for="(item, index)  in this.$store.getters.matchList" :key="item.id" @click.stop="">
             <section class="card-header">
 <!--                游戏logo-->
-                <img style="width: 20px"    v-lazy="'//www.nmgdjkj.com/'+$store.state.gameList[_.findIndex($store.state.gameList,o=> o.id == item['game_id'])]['game_logo']" >
+                <img style="width: 20px"    v-lazy="$store.getters.gameList.length ? '//www.nmgdjkj.com/'+$store.getters.gameList[_.findIndex($store.getters.gameList,o=> o.id == item['game_id'])]['game_logo']:''" >
 <!--                跳转到当前赛季列表-->
                 <div class="tournament-name"   @click.stop="$router.push({path:'/login',query:{id:item['tournament_id']}})">
                     {{item.tournament_name}}

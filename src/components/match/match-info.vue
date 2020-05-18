@@ -5,7 +5,7 @@
             <div class="vux-marquee" ref="notice">
                 <ul class="vux-marquee-box"
                     :style="'transform: translate3d(0px, '+bottom+'px, 0px); transition: transform 300ms ease 0s;'" >
-                    <li class="notice-item" v-for="itme in this.$store.state.announcement" :key="itme.id" >
+                    <li class="notice-item" v-for="itme in this.$store.getters.announcementList" :key="itme.id" >
                         <div>{{itme['cn_body']}}</div>
                     </li>
 
@@ -27,18 +27,7 @@
         },
         mounted() {//加载完毕后
 
-            this.$nextTick(() => {
-                this.$get(this.$api.announcement).then((res) => {
-                    //刷新数据
-                    this.$store.state.announcement = res.data.datas;
-                    // _this.matchPost = res.datas;
-                    //刷新列表后，重新计算滚动区域高度
-                    // _this.upMatch();
 
-
-
-                });
-            });
             this.timer=setInterval( ()=> {
                 const  Height = this.$refs.notice.offsetHeight;
 

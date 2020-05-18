@@ -52,7 +52,7 @@
     }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
     .about-page {
         display: -ms-flexbox;
         display: flex;
@@ -68,7 +68,7 @@
         width: 140px;
         height: 140px;
         background-size: cover;
-        background-image: url("../assets/images/svg/login_logo.svg");
+        background-image: url("~@/assets/images/svg/login_logo.svg");
     }
     .about-page .raybet-slogan {
         margin-top: 8.08768px;
@@ -81,7 +81,7 @@
         background-repeat: no-repeat;
         width: 69px;
         height: 80px;
-        background-image: url("../assets/images/svg/newbee_logo.svg");
+        background-image: url("~@/assets/images/svg/newbee_logo.svg");
     }
     .about-page .newbee-slogan {
         margin-top: 4.85259px;
@@ -92,7 +92,7 @@
         background-repeat: no-repeat;
         width: 146px;
         height: 29px;
-        background-image: url("../assets/images/svg/mga_logo.svg");
+        background-image: url("~@/assets/images/svg/mga_logo.svg");
     }
     .about-page .about-des {
         margin-top: 6.4701px;;
@@ -128,20 +128,20 @@
         background-repeat: no-repeat;
         width: 36px;
         height: 36px;
-        background-image: url('../assets/images/svg/mag.svg');
+        background-image: url('~@/assets/images/svg/mag.svg');
     }
     .about-page .about-icon .icon-content .moneygarm-icon {
         background-position: 50%;
         background-repeat: no-repeat;
         width: 36px;
         height: 36px;
-        background-image: url('../assets/images/svg/moneygarm.svg');
+        background-image: url('~@/assets/images/svg/moneygarm.svg');
     }
     .about-page .about-icon .icon-content .adult-icon {
         background-position: 50%;
         background-repeat: no-repeat;
         width: 36px;
         height: 36px;
-        background-image: url('../assets/images/svg/adult.svg');
+        background-image: url('~@/assets/images/svg/adult.svg');
     }
 </style>

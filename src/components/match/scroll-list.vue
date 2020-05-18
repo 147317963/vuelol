@@ -52,18 +52,13 @@
 
         },
         mounted() {//加载完毕后
-            this.$store.state.matchRefresh=true;
+            this.$store.dispatch('match/setMatchRefresh',true);
             this.$nextTick(() => {
-                this.$get(this.$api.match).then((res) => {
-                    //首次进入获得数据
-                    this.$store.state.match = res.data.datas;
-                    this.$store.state.matchRefresh=false;
-                    // _this.matchPost = res.datas;
-                    //刷新列表后，重新计算滚动区域高度
-                    // _this.upMatch();
 
+                this.$store.dispatch('match/getMatchList').then(()=>{
+                    this.$store.dispatch('match/setMatchRefresh',false);
+                })
 
-                });
                 this.scroll = new this.$BScroll(this.$refs.scroll, {       //初始化better-scroll
                     probeType: 3,   //1 滚动的时候会派发scroll事件，会截流。2滚动的时候实时派发scroll事件，不会截流。 3除了实时派发scroll事件，在swipe的情况下仍然能实时派发scroll事件
                     click: true,   //是否派发click事件
@@ -90,25 +85,26 @@
                 this.scroll.on('pullingDown', () => {
 
                     // this.styleObject.display ='block';
-                    this.$store.state.matchRefresh=true;
+                    this.$store.dispatch('match/setMatchRefresh',true);
+
                     this.pulldownMsg = '刷新中..';
                     //先清空数据
-                    this.$store.state.match=[];
+                    // this.$store.state.match=[];
                 });
 
                 //滑动结束松开事件
                 this.scroll.on('touchEnd', (pos) => {  //上拉刷新
                     if (pos.y > 50) {
+
                         setTimeout(() => {
-                            this.$get(this.$api.match).then((res) => {
-                                //刷新数据
-                                this.$store.state.match = res.data.datas;
+                            this.$store.dispatch('match/getMatchList').then(()=>{
                                 //恢复刷新提示文本值
                                 this.pulldownMsg = '下拉刷新';
-                                this.$store.state.matchRefresh=false;
+                                this.$store.dispatch('match/setMatchRefresh',false);
                                 // 事情做完，需要调用此方法告诉 better-scroll 数据已加载，否则下拉事件只会执行一次
                                 this.scroll.finishPullDown();
                             })
+
                         }, 500)
                     }
                 })
@@ -122,7 +118,7 @@
         updated() {//更新数据
         },
         watch: {
-            '$store.state.match'() {
+            '$store.getters.matchList'() {
                 this.$nextTick(() => {
                     this.scroll.refresh();
                     // this.scroll.finishPullUp();

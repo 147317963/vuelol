@@ -5,6 +5,28 @@ Vue.use(VueRouter);
 
   const routes = [
   {
+    /**
+     * Note: sub-menu only appear when route children.length >= 1
+     * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
+     *
+     * hidden: true                   如果设置为真，项目将不会显示在侧栏(默认为假)
+     * alwaysShow: true               如果设置为真，将始终显示根菜单
+     *                                如果不设置alwaysShow，当项目有多个子路由时，
+     *                                它将成为嵌套模式，否则不显示根菜单
+     * redirect: noRedirect           如果设置noRedirect将不会在面包屑中重定向
+     * name:'router-name'             该名称由<keep-alive>(必须设置!!)
+     * meta : {
+    roles: ['admin','editor']    控制页面角色(您可以设置多个角色)
+    requireAuth:true               true 是需要验证登录
+    title: 'title'               名称显示在侧栏和面包屑(推荐设置)
+    icon: 'home'                 图标显示在侧栏中
+    noCache: true                如果设置为真，页面将不会被缓存(默认为假)
+    affix: true                  如果设置为真，则标记将附加在标记视图中
+    breadcrumb: false            如果设置为false，则该项将隐藏在breadcrumb中(默认为true)
+    activeMenu: '/example/list'  如果设置路径，侧栏将突出显示您设置的路径
+  }
+     */
+
     //  vue-router学习笔记  记录开发中的点点滴滴
 
 //
@@ -23,70 +45,47 @@ Vue.use(VueRouter);
 
     //首页
     path: '/',
-    name: 'index',
-    // component: index
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/index.vue'),
+    component: () => import('@/views/index/index.vue'),
     keepAlive: true,//是否刷新页面
     meta: { // 在路由配置中加入meta:{requireAuth: true}
       requireAuth: false //false 不需要登录权限
     },
 
     },
-  // {
-  //   path: '/about',
-  //   name: 'About',
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  // }
     {
       //登录
       path: '/login',
-      name: 'login',
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ '../components/login.vue'),
+      component: () => import(/* webpackChunkName: "about" */ '@/views/login/index.vue'),
       meta: { // 在路由配置中加入meta:{requireAuth: true}
         requireAuth: false //false 不需要登录权限
       }
     },
     {
-      //修改密码
-      path: '/forgotPassword',
-      name: 'forgotPassword',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ '../components/forgot-password.vue'),
-      meta: { // 在路由配置中加入meta:{requireAuth: true}
-        requireAuth: true  //true 需要登录权限
-      }
-    },
-    {
-      //规则
-      path: '/bettingRules',
-      name: 'bettingRules',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ '../components/betting-rules.vue'),
+      //押注
+      path: '/betting/:id',
+      component: () => import("@/views/betting/index.vue"),
       meta: { // 在路由配置中加入meta:{requireAuth: true}
         requireAuth: false //false 不需要登录权限
       }
+    },
+    {
+      //游戏规则
+      path: '/rules',
+      component: () => import("@/views/rules/index.vue"),
+      meta: { // 在路由配置中加入meta:{requireAuth: true}
+        requireAuth: false //false 不需要登录权限
+      },
     },
     {
       //注册
       path: '/register',
-      name: 'register',
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ '../components/register.vue'),
+      component: () => import('@/views/register/index.vue'),
       meta: { // 在路由配置中加入meta:{requireAuth: true}
         requireAuth: false //false 不需要登录权限
       }
@@ -94,7 +93,6 @@ Vue.use(VueRouter);
     {
       //个人中心
       path: '/personal',
-      name: 'personal',
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
@@ -106,16 +104,14 @@ Vue.use(VueRouter);
     {
       //关于公司
       path: '/about',
-      name: 'about',
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ '../components/about.vue')
+      component: () => import( '@/views/about/index.vue')
     },
     {
       //设置
       path: '/settings',
-      name: 'settings',
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.

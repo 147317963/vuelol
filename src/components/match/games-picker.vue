@@ -2,10 +2,10 @@
 <!--    <collapse-transition>-->
     <transition mode="out-in" enter-active-class="animated fadeInDown" leave-active-class="animated fadeOutUp">
 
-            <div class="vux-popup-dialog games-picker vux-popup-top vux-popup-show" v-show="this.$store.state.gameListShow===true"  ref="scroll">
+            <div class="vux-popup-dialog games-picker vux-popup-top vux-popup-show" v-show="this.$store.getters.gameMenuShow===true"  ref="scroll">
                 <div  class="vux-checker-box checker-content">
                     <div  class="default-checker-item selected-checker-item">
-                        <!--                    <div  style="height: 2px;">&nbsp;</div>-->
+                                            <div  style="height: 2px;">&nbsp;</div>
                         <div  class="games-info">
                             <div  class="games-icon all-games-icon"></div>
                             <div >全部</div>
@@ -13,7 +13,7 @@
                         <div  class="selected-checker-light"></div>
                     </div>
 
-                    <div   class="vux-checker-item vux-tap-active default-checker-item selected-all-games" v-for="itme  in this.$store.state.gameList" :key="itme['id']">
+                    <div   class="vux-checker-item vux-tap-active default-checker-item selected-all-games" v-for="itme  in this.$store.getters.gameList" :key="itme['id']">
                         <div  style="height: 2px;">&nbsp;</div>
                         <div  class="games-info">
                             <img   class="games-icon" v-lazy="'//www.nmgdjkj.com/'+itme.game_logo">
@@ -96,7 +96,7 @@
             // '$store.state.gameList'() {
             //     this.setScroll();
             // },
-            '$store.state.gameListShow'() {
+            '$store.getters.gameMenuShow'() {
 
                 this.setScroll();
                 console.log('更新');

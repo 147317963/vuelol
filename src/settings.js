@@ -37,7 +37,10 @@ module.exports = {
    * @type {string }
    * @description储存token名称。
    */
-  tokenName:'admin_token'
+  tokenName:'user_token'
+  /**
+   *
+   */
 
 
 }
