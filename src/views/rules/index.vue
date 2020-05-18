@@ -293,7 +293,7 @@
         name: "rules",
         data() {
             return {
-                name:'Raybet',
+                name:this.$store.getters.configList[_.findIndex(this.$store.getters.configList,{'name':'site_name'})]['value'],
             }
         },
         methods: {//条用方法

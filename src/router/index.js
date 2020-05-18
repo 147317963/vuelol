@@ -96,7 +96,7 @@ Vue.use(VueRouter);
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ '../components/personal/personal.vue'),
+      component: () => import('@/views/personal/index.vue'),
       meta: { // 在路由配置中加入meta:{requireAuth: true}
         requireAuth: true  //true 需要登录权限
       }
@@ -115,7 +115,7 @@ Vue.use(VueRouter);
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ '../components/settings/index.vue')
+      component: () => import('../components/settings/index.vue')
     },
 ]
 

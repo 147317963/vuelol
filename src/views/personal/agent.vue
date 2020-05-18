@@ -1,10 +1,10 @@
 <template>
-
+    
 </template>
 
 <script>
     export default {
-        name: "index",
+        name: "agent",
         data() {
             return {}
         },
@@ -13,8 +13,6 @@
         mounted() {//加载完毕后
         },
         beforeCreate() {//初始化前
-        },
-        beforeDestroy() {//组件销毁前
         },
         updated() {//更新数据
         },
@@ -29,6 +27,6 @@
     }
 </script>
 
-<style lang="less" scoped>
+<style scoped>
 
 </style>

@@ -4,7 +4,7 @@
         <div class="home-match-card" v-for="(item, index)  in this.$store.getters.matchList" :key="item.id" @click.stop="">
             <section class="card-header">
 <!--                游戏logo-->
-                <img style="width: 20px"    v-lazy="$store.getters.gameList.length ? '//www.nmgdjkj.com/'+$store.getters.gameList[_.findIndex($store.getters.gameList,o=> o.id == item['game_id'])]['game_logo']:''" >
+                <img style="width: 20px"    v-lazy="$store.getters.gameList.length && $store.getters.configList.length ? $store.getters.configList[_.findIndex($store.getters.configList,{'name':'img_url'})]['value']+$store.getters.gameList[_.findIndex($store.getters.gameList,o=> o.id == item['game_id'])]['game_logo']:''" >
 <!--                跳转到当前赛季列表-->
                 <div class="tournament-name"   @click.stop="$router.push({path:'/login',query:{id:item['tournament_id']}})">
                     {{item.tournament_name}}
@@ -16,7 +16,7 @@
             </section>
             <section class="card-body">
                 <div class="card-body-team">
-                    <img class="team-logo"  v-lazy="'//www.nmgdjkj.com/'+item['team'][_.findIndex(item['team'],{'pos':1})]['team_logo']"   >
+                    <img class="team-logo"  v-lazy="$store.getters.gameList.length && $store.getters.configList.length ? $store.getters.configList[_.findIndex($store.getters.configList,{'name':'img_url'})]['value']+item['team'][_.findIndex(item['team'],{'pos':1})]['team_logo']:''"   >
                 </div>
                 <div class="card-body-center">
                     <!--                                团队1 logo-->
@@ -37,7 +37,7 @@
                          class="center-right">
                 </div>
                 <div class="card-body-team">
-                    <img class="team-logo"  v-lazy="'//www.nmgdjkj.com/'+item['team'][_.findIndex(item['team'],{'pos':2})]['team_logo']"   >
+                    <img class="team-logo"  v-lazy="$store.getters.gameList.length && $store.getters.configList.length ? $store.getters.configList[_.findIndex($store.getters.configList,{'name':'img_url'})]['value']+item['team'][_.findIndex(item['team'],{'pos':2})]['team_logo']:''"   >
                 </div>
             </section>
             <div class="odds-group-title">

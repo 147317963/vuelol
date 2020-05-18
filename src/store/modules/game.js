@@ -2,7 +2,6 @@ import { getList } from '@/api/game'
 
 
 const state = {
-    gameImgUrl:'//www.nmgdjkj.com',
     gameList:[],
     gameMenuShow:false,//游戏菜单列表
 
