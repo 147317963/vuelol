@@ -3,9 +3,9 @@ import store from '@/store';
 import {Toast} from 'vant';
 
 
-
 const service = axios.create({
     timeout: 10000, // 请求超时时间
+    // baseURL:'http://192.168.8.118',
     // headers :{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
 })
 

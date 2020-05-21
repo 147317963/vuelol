@@ -41,28 +41,28 @@ module.exports = {
     lintOnSave: true,
     css: {
         loaderOptions: {
-            postcss: {
-                plugins: [
-                    require("postcss-px-to-viewport")({
-                        rootValue: 32, // 换算的基数(设计图750的根字体为32)
-                        unitToConvert: 'px', //将要转化的单位
-                        viewportWidth: 375,
-                        // viewportHeight: 1334,
-                        unitPrecision: 3,
-                        viewportUnit: "vw",
-                        selectorBlackList: [
-                            ".ignore",
-                            ".hairlines"
-                        ],
-                        minPixelValue: 1,
-                        mediaQuery: false
-                    }),
-                    require("autoprefixer")({
-                        overrideBrowserslist: ['Android >= 4.0', 'iOS >= 8']
-                    }),
-
-                ]
-            },
+            // postcss: {
+            //     plugins: [
+            //         require("postcss-px-to-viewport")({
+            //             rootValue: 32, // 换算的基数(设计图750的根字体为32)
+            //             unitToConvert: 'px', //将要转化的单位
+            //             viewportWidth: 375,
+            //             // viewportHeight: 1334,
+            //             unitPrecision: 3,
+            //             viewportUnit: "vw",
+            //             selectorBlackList: [
+            //                 ".ignore",
+            //                 ".hairlines"
+            //             ],
+            //             minPixelValue: 1,
+            //             mediaQuery: false
+            //         }),
+            //         require("autoprefixer")({
+            //             overrideBrowserslist: ['Android >= 4.0', 'iOS >= 8']
+            //         }),
+            //
+            //     ]
+            // },
             less: {
                 // modifyVars: {
                 //     // 直接覆盖变量

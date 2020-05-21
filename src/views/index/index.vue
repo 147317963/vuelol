@@ -3,7 +3,7 @@
        <match-tab></match-tab>
        <games-picker></games-picker>
        <match-info></match-info>
-       <loading-bkg></loading-bkg>
+
        <scroll-list></scroll-list>
    </div>
 
@@ -14,10 +14,8 @@
 <script>
     import ScrolLlist from  '@/components/match/scroll-list'
     import MatchInfo from '@/components/match/match-info'
-    import LoadingBkg from '@/components/loading/loading-bkg'
     import MatchTab from '@/components/match/match-tab'
     import GamesPicker from '@/components/match/games-picker'
-    import ResizeMixin from '@/utils/ResizeHandler'
     export default {
         name: "index",
         data() {
@@ -40,15 +38,14 @@
             'games-picker': GamesPicker,
             'match-info': MatchInfo,
             'scroll-list': ScrolLlist,
-            'loading-bkg': LoadingBkg,
         },
-        mixins: [ResizeMixin],
         watch: {
             //data(val, newval) {
             //console.log(val)
             //console.log(newval)
             //}
-        }
+        },
+
     }
 </script>
 

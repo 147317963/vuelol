@@ -1,10 +1,10 @@
 <template>
     <transition name="fade">
-    <div style="padding-left: 8px;padding-right: 8px;" v-show="this.$store.getters.matchRefresh===false">
-        <div class="home-match-card" v-for="(item, index)  in this.$store.getters.matchList" :key="item.id" @click.stop="">
+    <div style="padding-left: 8px;padding-right: 8px;">
+        <div class="home-match-card" v-for="(item, index)  in matchList" :key="item.id" @click.stop="">
             <section class="card-header">
 <!--                游戏logo-->
-                <img style="width: 20px"    v-lazy="$store.getters.gameList.length && $store.getters.configList.length ? $store.getters.configList[_.findIndex($store.getters.configList,{'name':'img_url'})]['value']+$store.getters.gameList[_.findIndex($store.getters.gameList,o=> o.id == item['game_id'])]['game_logo']:''" >
+                <img style="width: 20px"    v-lazy="gameList.length && configList.length ? configList[_.findIndex(configList,{'name':'img_url'})]['value']+gameList[_.findIndex(gameList,o=> o.id == item['game_id'])]['game_logo']:''" >
 <!--                跳转到当前赛季列表-->
                 <div class="tournament-name"   @click.stop="$router.push({path:'/login',query:{id:item['tournament_id']}})">
                     {{item.tournament_name}}
@@ -16,7 +16,7 @@
             </section>
             <section class="card-body">
                 <div class="card-body-team">
-                    <img class="team-logo"  v-lazy="$store.getters.gameList.length && $store.getters.configList.length ? $store.getters.configList[_.findIndex($store.getters.configList,{'name':'img_url'})]['value']+item['team'][_.findIndex(item['team'],{'pos':1})]['team_logo']:''"   >
+                    <img class="team-logo"  v-lazy="gameList.length && configList.length ? configList[_.findIndex(configList,{'name':'img_url'})]['value']+item['team'][_.findIndex(item['team'],{'pos':1})]['team_logo']:''"   >
                 </div>
                 <div class="card-body-center">
                     <!--                                团队1 logo-->
@@ -37,7 +37,7 @@
                          class="center-right">
                 </div>
                 <div class="card-body-team">
-                    <img class="team-logo"  v-lazy="$store.getters.gameList.length && $store.getters.configList.length ? $store.getters.configList[_.findIndex($store.getters.configList,{'name':'img_url'})]['value']+item['team'][_.findIndex(item['team'],{'pos':2})]['team_logo']:''"   >
+                    <img class="team-logo"  v-lazy="gameList.length && configList.length ? configList[_.findIndex(configList,{'name':'img_url'})]['value']+item['team'][_.findIndex(item['team'],{'pos':2})]['team_logo']:''"   >
                 </div>
             </section>
             <div class="odds-group-title">
@@ -98,8 +98,16 @@
 
 <script>
     // import _ from 'lodash';
+    import { mapGetters } from 'vuex'
     export default {
         name: "home-match-card",
+        computed: {
+            ...mapGetters([
+                'gameList',
+                'matchList',
+                'configList',
+            ])
+        },
         data() {
             return {}
         },

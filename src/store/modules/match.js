@@ -3,8 +3,6 @@ import { getList } from '@/api/match'
 
 const state = {
     matchList:[],
-    matchRefresh:false,
-
 }
 const mutations = {
     SET_MATCH_LIST: (state, list) => {
@@ -16,9 +14,7 @@ const mutations = {
         state.matchList = listNew;
 
     },
-    SET_MATCH_REFRESH:(state,show)=>{
-        state.matchRefresh = show;
-    }
+
 }
 const actions = {
     getMatchList({ commit }) {
@@ -32,9 +28,10 @@ const actions = {
             })
         })
     },
-    setMatchRefresh({ commit },show) {
-        commit('SET_MATCH_REFRESH', show);
-    },
+    setMatcList({ commit },list){
+        commit('SET_MATCH_LIST', list);
+    }
+
 
 }
 export default {

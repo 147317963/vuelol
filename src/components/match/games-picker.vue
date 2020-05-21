@@ -1,117 +1,121 @@
 <template>
-<!--    <collapse-transition>-->
+    <!--    <collapse-transition>-->
     <transition mode="out-in" enter-active-class="animated fadeInDown" leave-active-class="animated fadeOutUp">
 
-            <div class="vux-popup-dialog games-picker vux-popup-top vux-popup-show" v-show="this.$store.getters.gameMenuShow===true"  ref="scroll">
-                <div  class="vux-checker-box checker-content">
-                    <div  class="default-checker-item selected-checker-item">
-                                            <div  style="height: 2px;">&nbsp;</div>
-                        <div  class="games-info">
-                            <div  class="games-icon all-games-icon"></div>
-                            <div >全部</div>
-                        </div>
-                        <div  class="selected-checker-light"></div>
-                    </div>
+        <div class="vux-popup-dialog games-picker vux-popup-top vux-popup-show"
+             v-show="gameMenuShow===true">
+            <better-scroll
 
-                    <div   class="vux-checker-item vux-tap-active default-checker-item selected-all-games" v-for="itme  in this.$store.getters.gameList" :key="itme['id']">
-                        <div  style="height: 2px;">&nbsp;</div>
-                        <div  class="games-info">
-                            <img   class="games-icon" v-lazy="'//www.nmgdjkj.com/'+itme.game_logo">
-                            <div >{{itme.game_name}}</div>
+                    :listenData="gameList"
+
+
+            >
+
+
+
+                <div class="vux-checker-box checker-content">
+
+                    <template v-for="(itme,index)  in gameList">
+                        <div class="vux-checker-item vux-tap-active default-checker-item" :class="itme['selected']?'selected-checker-item':''"
+                             v-if="itme.status===1"
+                             :key="itme['id']"
+                             @click.stop="$store.dispatch('game/updateGmaeList',{data:Object.assign(itme, {selected:!itme.selected}),index})"
+                        >
+                            <div style="height: 2px;">&nbsp;</div>
+                            <div class="games-info">
+                                <img class="games-icon"
+                                     v-lazy="configList.length ? configList[_.findIndex(configList,{'name':'img_url'})]['value']+itme['game_logo']:''">
+                                <div>{{itme['game_name']}}</div>
+                            </div>
+                            <div class="selected-checker-light"></div>
                         </div>
-                        <div  class="selected-checker-light"></div>
-                    </div>
+                    </template>
+
 
                 </div>
-            </div>
+
+            </better-scroll>
+            <loading-bkg :show="gameMenuRefresh"></loading-bkg>
+        </div>
     </transition>
 
-<!--    </collapse-transition>-->
+    <!--    </collapse-transition>-->
 </template>
 
 <script>
     // import CollapseTransition from '@/utils/collapse-transition'; // 本人将collapse-transition.js 放置在工具类utils文件夹
+    import BetterScroll from '@/components/BetterScroll';
+    import LoadingBkg from '@/components/loading/loading-bkg'
+    import { mapGetters } from 'vuex'
+
     export default {
         name: "games-picker",
+
+        components: {//注册组件
+            BetterScroll,
+            LoadingBkg,
+        },
+        computed: {
+            ...mapGetters([
+                'configList',
+                'gameMenuShow',
+                'gameList',
+                'gameMenuRefresh',
+            ])
+        },
         data() {
             return {
-                scroll:'',
-
+                pulldownMsg: '下拉刷新',
 
 
             }
         },
         methods: {//条用方法
-            // getGameList(){
-            //     this.$nextTick(() => {
-            //
-            //         this.$get(this.$api.game).then(res => {
-            //             if(res.code === 200){
-            //                 this.$store.state.gameList = res.datas;
-            //                 // this.gameList = res.datas;
-            //
-            //             }
-            //
-            //         });
-            //     });
-            //
-            //
-            // },
-            setScroll() {
-                this.$nextTick(() => {
+            pullingDownEnd(scroll) {
+                this.$store.dispatch('app/setGameMenuRefresh', true);
+                this.$store.dispatch('game/setGameList', []);
+                this.pulldownMsg = '刷新中..';
+                setTimeout(() => {
+                    this.$store.dispatch('game/getGameList').then(() => {
+                        //恢复刷新提示文本值
+                        this.pulldownMsg = '下拉刷新';
+                        this.$store.dispatch('app/setGameMenuRefresh', false);
+                        // 事情做完，需要调用此方法告诉 better-scroll 数据已加载，否则下拉事件只会执行一次
+                        scroll.finishPullDown();
+                    })
 
+                }, 500)
 
-                    if(this.scroll){
-                        this.scroll.destroy();
-                    }
-                    setTimeout(() => {
-                        this.scroll = new this.$BScroll(this.$refs.scroll, {
-                            mouseWheel: true,
-                            tap: true,
-                            scrollY:true,
-                            scrollX:false,
-                            scrollbar: {
-                                fade: true,
-                                interactive: false // 1.8.0 新增
-                            },
-                            click: true,
-                        });
-                    }, 100);
-                });
-            },
+            }
 
         },
         mounted() {//加载完毕后
-            // this.getGameList();
+
 
         },
         beforeCreate() {//初始化前
         },
         updated() {//更新数据
         },
-        components: {//注册组件
-            // 'collapse-transition': CollapseTransition,
-        },
-        watch: {
-            // '$store.state.gameList'() {
-            //     this.setScroll();
-            // },
-            '$store.getters.gameMenuShow'() {
-
-                this.setScroll();
-                console.log('更新');
-
-            },
-            //data(val, newval) {
-            //console.log(val)
-            //console.log(newval)
-            //}
-        }
+        watch: {}
     }
 </script>
 
 <style scoped>
+    .__refresh {
+        position: absolute;
+        width: 100%;
+        color: black;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        font-size: 16px;
+    }
 
+    .__refresh .refresh-text {
+        font-size: 1.4rem;
+        color: #bacef1;
+    }
 
     .vux-popup-dialog {
         position: fixed;
@@ -126,6 +130,7 @@
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
     }
+
     .vux-popup-dialog.vux-popup-top {
         width: 100%;
         top: 0;
@@ -133,6 +138,7 @@
         bottom: auto;
         left: 0;
     }
+
     .games-picker {
         position: absolute;
         margin-top: 45px;
@@ -141,6 +147,7 @@
         background-color: #0c121f;
         overflow: hidden;
     }
+
     .games-picker .checker-content {
         display: -ms-flexbox;
         display: flex;
@@ -221,13 +228,15 @@
         transition: all .2s ease-out;
     }
 
-    .games-picker .checker-content .selected-checker-item .games-info>.games-icon {
+    .games-picker .checker-content .selected-checker-item .games-info > .games-icon {
         filter: unset;
         transition: filter .2s ease-out;
     }
-    .games-picker .checker-content .selected-all-games .games-info>.games-icon {
+
+    .games-picker .checker-content .selected-all-games .games-info > .games-icon {
         filter: unset;
     }
+
     .games-picker .checker-content .selected-all-games {
         color: #bacef1;
     }

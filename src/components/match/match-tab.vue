@@ -1,7 +1,7 @@
 <template>
     <div class="match-tab">
         <transition mode="out-in" enter-active-class="animated fadeInUp">
-        <section class="filter-matches" v-show="this.$store.getters.gameMenuShow===false">
+        <section class="filter-matches" v-show="gameMenuShow===false">
             <div class="vux-tab-wrap match-tab">
                 <div class="vux-tab-container">
                     <div class="vux-tab">
@@ -31,16 +31,16 @@
                 </div>
                 <!--                <div class="vux-tab-ink-bar vux-tab-ink-bar-transition-forward" style="display: block; height: 22px; background-color: transparent; left: 50%; right: 25%;">&lt;!&ndash;&ndash;&gt;</div>-->
             </div>
-            <div class="show-filter-games-btn" @click.stop="$store.dispatch('game/setGameMenuShow',true)"></div>
+            <div class="show-filter-games-btn" @click.stop="$store.dispatch('app/setGameMenuShow',true)"></div>
         </section>
         </transition>
         <transition mode="out-in" enter-active-class="animated fadeInUp">
-            <section class="filter-games" v-show="this.$store.getters.gameMenuShow===true">
+            <section class="filter-games" v-show="gameMenuShow===true">
                 <div class="hide-filter-games-btn" style="visibility: hidden;">&nbsp;&nbsp;
                 </div>
                 <div>游戏筛选</div>
                 <div class="hide-filter-games-btn">
-                    <div class="btn-content" @click.stop="$store.dispatch('game/setGameMenuShow',false)">✓</div>
+                    <div class="btn-content" @click.stop="$store.dispatch('app/setGameMenuShow',false)">✓</div>
                 </div>
             </section>
         </transition>
@@ -52,8 +52,14 @@
 
 <script>
     // import _ from 'lodash';
+    import {mapGetters} from "vuex";
     export default {
         name: "match-info",
+        computed: {
+            ...mapGetters([
+                'gameMenuShow',
+            ])
+        },
         data() {
             return {
                 left:0,

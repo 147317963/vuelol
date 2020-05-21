@@ -4,8 +4,6 @@ import {getToken} from '@/utils/auth' // 从cookie获取令牌
 
 //定义完路由后，我们主要是利用vue-router提供的钩子函数beforeEach()对路由进行判断。
 router.beforeEach((to, from, next) => {
-     console.log(to);
-
     // 确定用户是否已登录
     const hasToken = getToken();
 

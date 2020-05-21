@@ -5,13 +5,13 @@ import CryptoJS from 'crypto-js';
 
 const state = {
     token:getToken(),
-    info:[],
+    userInfo:[],
 }
 
 const mutations = {
     //用户信息
-    SET_INFO: (state,info) => {
-        state.info = info;
+    SET_USER_INFO: (state,info) => {
+        state.userInfo = info;
     },
     //设置token
     SET_TOKEN: (state, token) => {
@@ -57,7 +57,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             getInfo().then(res => {
                 const {result} = res.data
-                commit('SET_INFO', result)
+                commit('SET_USER_INFO', result)
                 resolve(result)
             }).catch(error => {
                 reject(error)
@@ -66,9 +66,9 @@ const actions = {
     },
 
     // 用户注销
-    logout({commit, state,dispatch}) {
+    logout({commit}) {
         return new Promise((resolve, reject) => {
-            logout(state.token).then(() => {
+            logout().then(() => {
                 commit('SET_TOKEN', '')
                 commit('SET_INFO', [])
                 removeToken()
@@ -83,7 +83,7 @@ const actions = {
     resetToken({commit}) {
         return new Promise(resolve => {
             commit('SET_TOKEN', '')
-            commit('SET_INFO', [])
+            commit('SET_USER_INFO', [])
             removeToken()
             resolve()
         })

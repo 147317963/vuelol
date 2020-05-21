@@ -3,22 +3,25 @@ import { getList } from '@/api/game'
 
 const state = {
     gameList:[],
-    gameMenuShow:false,//游戏菜单列表
+
 
 }
 const mutations = {
     SET_GAME_LIST: (state, list) => {
         let listNew=[];
         for(let i  in list){
-            listNew.push(list[i]) //值 ['aaa' 190 'man']
 
+            if(!Object.prototype.hasOwnProperty.call(list[i],'selected')){
+                listNew.push(Object.assign(list[i], {selected:true}))
+            }
         }
         state.gameList = listNew;
-
     },
-    SET_GAME_MENU_SHOW:(state, show)=>{
-        state.gameMenuShow = show;
+    UPDATE_GAME_LIST:(state, list) => {
+        const { index, data } = list;
+        state.gameList.splice(index,1,data)
     }
+
 }
 const actions = {
     getGameList({ commit }) {
@@ -32,10 +35,12 @@ const actions = {
             })
         })
     },
-    setGameMenuShow({ commit }, show) {
-        console.log(show);
-        commit('SET_GAME_MENU_SHOW', show)
+    setGameList({ commit },list){
+        commit('SET_GAME_LIST', list);
     },
+    updateGmaeList({ commit },list){
+        commit('UPDATE_GAME_LIST', list);
+    }
 }
 export default {
     namespaced: true,
