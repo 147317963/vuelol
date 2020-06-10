@@ -2,28 +2,35 @@
     <!--    <collapse-transition>-->
     <transition mode="out-in" enter-active-class="animated fadeInDown" leave-active-class="animated fadeOutUp">
 
-        <div class="vux-popup-dialog games-picker vux-popup-top vux-popup-show" v-show="gameMenuShow===true">
+        <div class="vux-popup-dialog games-picker vux-popup-top vux-popup-show" v-show="gamePickerVisibility">
             <div class="vux-checker-box checker-content">
-<!--                <div  class="default-checker-item selected-checker-item">-->
-<!--                    <div  style="height: 2px;">&nbsp;</div>-->
-<!--                    <div  class="games-info">-->
-<!--                        <div  class="games-icon all-games-icon"></div>-->
-<!--                        <div >全部</div>-->
-<!--                    </div>-->
-<!--                    <div  class="selected-checker-light"></div>-->
-<!--                </div>-->
+                                <div  class="default-checker-item"
+                                      :class="{ 'selected-checker-item': !selectedGameList.length }"
+                                      @click.stop="showAllGames()"
+                                >
+                                    <div  style="height: 2px;">&nbsp;</div>
+                                    <div  class="games-info">
+                                        <div  class="games-icon all-games-icon"></div>
+                                        <div >全部</div>
+                                    </div>
+                                    <div  class="selected-checker-light"></div>
+                                </div>
                 <template v-for="(item)  in gameList">
                     <div class="vux-checker-item vux-tap-active default-checker-item"
-                         :class="item['selected']?'selected-checker-item':''"
+                         @click="selectedGameList = item"
+                         :class="{
+                                'selected-all-games': !selectedGameList.length,
+                                'selected-checker-item':isSelectedGames(item.id)
+                         }"
 
-                         :key="item['id']"
-                         @click.stop="item = Object.assign(item, {selected:!item.selected})"
+                         :key="item.id"
+
                     >
                         <div style="height: 2px;">&nbsp;</div>
                         <div class="games-info">
                             <img class="games-icon"
-                                 v-lazy="Object.keys(configList).length ? configList['img_url']['value']+item['logo']:''">
-                            <div>{{item['name']}}</div>
+                                 v-lazy="getGameIcon(item.logo)">
+                            <div>{{getGameName(item)}}</div>
                         </div>
                         <div class="selected-checker-light"></div>
                     </div>
@@ -46,9 +53,18 @@
             ...mapGetters([
                 'configList',
                 'gameList',
-                'gameMenuShow',
-
-            ])
+                'gamePickerVisibility',
+                'isChinese'
+                ],
+            ),
+            selectedGameList: {
+                get() {
+                    return  this.$store.getters.selectedGameList
+                },
+                set(value) {
+                    this.$store.dispatch("game/setSelectedGameList", value)
+                }
+            }
         },
         data() {
             return {
@@ -56,6 +72,18 @@
             }
         },
         methods: {//条用方法
+            getGameIcon(logo){
+               return  Object.keys(this.configList).length ? this.configList['img_url']['value']+logo:''
+            },
+            showAllGames() {
+                 this.selectedGameList = []
+            },
+            isSelectedGames(id){
+               return  this.selectedGameList.some(item => item.id === id)
+            },
+            getGameName(item) {
+                return this.isChinese ?  item.name : item.short_name
+            },
 
         },
         mounted() {//加载完毕后

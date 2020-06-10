@@ -6,7 +6,34 @@
             <div >赛事竞猜</div>
         </section>
 
-        <scroll-list></scroll-list>
+        <vue-Scroll :ops="scrollOps" ref="scroller"
+
+                    @refresh-start="pullRefresh"
+                    @load-start="pushLoad"
+                    @handle-scroll-complete="handleScroll"
+        >
+            <div slot="refresh-start">
+                <div class="refresh-text">
+                    刷新中...
+                </div>
+
+            </div>
+            <div slot="refresh-active">
+                <div class="refresh-text">下拉刷新</div>
+
+            </div>
+            <div slot="refresh-deactive">
+                <div class="refresh-text">下拉刷新</div>
+            </div>
+            <transition name="matchList.length <= 30 ? 'fade':''">
+                <div v-show="homeMatchList().length">
+                    <template v-for="(item)  in homeMatchList()">
+                        <match-card :match-data="item" :key="item.id"></match-card>
+                    </template>
+
+                </div>
+            </transition>
+        </vue-Scroll>
 
 
     </div>
@@ -15,7 +42,6 @@
 </template>
 
 <script>
-    import scrollList from '@/components/match/scroll-list';
     import loading from '@/components/loading'
     import {mapGetters} from "vuex";
     export default {
@@ -26,11 +52,27 @@
             ])
         },
         components: {//注册组件
-            scrollList,
             loading,
         },
         data() {
-            return {}
+            return {
+                scrollOps: {
+                    vuescroll: {
+                        mode: "slide",
+                        pullRefresh: {
+                            enable: true
+                        },
+                        pushLoad: {
+                            enable: false,
+                            auto: true,
+                            autoLoadDistance: 50
+                        }
+                    },
+                    bar: {
+                        disable: true
+                    }
+                }
+            }
         },
         methods: {//条用方法
 

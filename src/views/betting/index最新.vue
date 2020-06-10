@@ -1,174 +1,168 @@
 <template>
-    <div class="betting-page router-view" v-if="bettingData">
-        <loading :show="showLoading"></loading>
-        <transition name="fade">
-            <div style="height: 100%" v-if="bettingData">
-                <section class="betting-info" v-show="!showStream">
+    <div class="betting-page router-view">
+        <template v-for="(itemList)  in matchList.filter(t => t.id == $route.params.match_id)">
+            <div :key="itemList.id" style="height: 100%">
+
+
+                <section class="betting-info">
                     <section class="info-title">
                         <img style="width: 20px"
-                             v-lazy="getGameIcon()">
-                        <div class="tournament-name">{{getTournamentName()}}</div>
-                        <div class="match-round">&nbsp;/ {{matchRound()}}</div>
+                             v-lazy="Object.values(gameList).length && Object.keys(configList).length ? configList['img_url']['value']+gameList[itemList['game_id']]['logo']:''">
+                        <div class="tournament-name">{{itemList['tournament_name']}}</div>
+                        <div class="match-round">&nbsp;/ {{itemList.round.toUpperCase()}}</div>
                         <!--                <div>{{_.findIndex(list['team'],{'pos':1})}}</div>-->
                     </section>
                     <section class="info-team">
                         <div class="team-info">
                             <img class="team-logo"
-                                 v-lazy="configList.img_url.value + guestTeam().team_logo">
+                                 v-lazy="Object.values(gameList).length && Object.keys(configList).length ? configList['img_url']['value']+itemList['team'][_.findIndex(itemList['team'],{'pos':1})]['team_logo']:''">
                             <div class="team-name">
-                                {{guestTeam().team_name}}
+                                {{itemList['team'][_.findIndex(itemList['team'],{'pos':1})]['team_name']}}
                             </div>
                         </div>
                         <div class="betting-status">
                             <div
                                     :class="[
-                             addClass('status-early'),
-                             addClass('status-live'),
-                             addClass('status-over'),
+                             addClass('status-early',itemList),
+                             addClass('status-live',itemList),
+                             addClass('status-over',itemList),
                          ]"
                             >
-                                <div class="score guest-score"
-                                     v-if="bettingData.status !==matchStatus['未开始']['status']">
-                                    {{guestTeam().score.total || 0}}
+                                <div class="score guest-score" v-if="itemList.status !==matchStatus['未开始']['status']">
+                                    {{itemList['team'][_.findIndex(itemList['team'],{'pos':1})]['score']['total'] || 0}}
                                 </div>
-                                <div class="in-play" v-if="bettingData.status === matchStatus['滚盘中']['status']">滚盘中
+                                <div class="in-play" v-if="itemList['status'] === matchStatus['滚盘中']['status']">滚盘中
                                 </div>
-                                <div class="is-over" v-if="bettingData.status ===matchStatus['已结束']['status']">
-                                    <div class="over-date">{{moment(bettingData['start_time']).format('M月 DD日')}}</div>
-                                    <div class="over-date">{{getWeek(bettingData['start_time'])}}
-                                        {{bettingData['start_time'].substr(11,5)}}
-                                    </div>
+                                <div class="is-over" v-if="itemList.status ===matchStatus['已结束']['status']">
+                                    <div class="over-date">{{moment(itemList['start_time']).format('M月 DD日')}}</div>
+                                    <div class="over-date">{{getWeek(itemList['start_time'])}} {{itemList['start_time'].substr(11,5)}}</div>
                                 </div>
-                                <div class="score home-score" v-if="bettingData.status !==matchStatus['未开始']['status']">
-                                    {{homeTeam().score.total || 0}}
+                                <div class="score home-score" v-if="itemList.status !==matchStatus['未开始']['status']">
+                                    {{itemList['team'][_.findIndex(itemList['team'],{'pos':2})]['score']['total'] || 0}}
                                 </div>
 
-                                <div class="is-early" v-if="bettingData.status === matchStatus['未开始']['status']">
-                                    <div class="match-date">{{moment(bettingData.start_time).format('M 月 DD日')+getWeek(bettingData.start_time)}}
-                                    </div>
-                                    <!--                                    6月 07日 周日-->
-                                    <div class="match-time">{{bettingData['start_time'].substr(11,5)}}</div>
+                                <div class="is-early" v-if="itemList.status === matchStatus['未开始']['status']">
+                                    <div class="match-date">{{moment(itemList['start_time']).format('M月 DD日 ')+getWeek(itemList['start_time'])}}</div>
+<!--                                    6月 07日 周日-->
+                                    <div class="match-time">{{itemList['start_time'].substr(11,5)}}</div>
                                 </div>
                             </div>
-                            <div class="is-raedy" v-if="bettingData['status'] === matchStatus['未开始']['status']">
+                            <div class="is-raedy" v-if="itemList['status'] === matchStatus['未开始']['status']">
                                 {{matchStatus['未开始']['name']}}
                             </div>
-                            <div class="is-live live-url" @click.stop="showStream = !showStream"
-                                 v-if="bettingData['live_url'] && bettingData['status'] === matchStatus['滚盘中']['status']">
+                            <div class="is-live live-url"
+                                 v-if="itemList['live_url'] && itemList['status'] === matchStatus['滚盘中']['status']">
                                 <div class="stream-icon"></div>
                                 <div>直播</div>
                             </div>
-                            <div class="is-over" v-if="bettingData['status'] === matchStatus['已结束']['status']">已结束</div>
+                            <div class="is-over" v-if="itemList['status'] === matchStatus['已结束']['status']">已结束</div>
                         </div>
 
 
                         <div class="team-info">
                             <img class="team-logo"
-                                 v-lazy="configList.img_url.value + homeTeam().team_logo">
+                                 v-lazy="Object.values(gameList).length && Object.keys(configList).length ? configList['img_url']['value']+itemList['team'][_.findIndex(itemList['team'],{'pos':2})]['team_logo']:''">
                             <div class="team-name">
-                                {{homeTeam().team_name}}
+                                {{itemList['team'][_.findIndex(itemList['team'],{'pos':2})]['team_name']}}
                             </div>
                         </div>
                     </section>
                 </section>
-                <section  class="live-stream"  v-if="showStream">
-                    <div  class="close-stream">
-                        <div  class="close-stream-icon" @click.stop="showStream = !showStream"></div>
-                    </div>
-                    <video  preload="" width="100%" height="164px" webkit-playsinline=""
-                           playsinline="true" x5-playsinline="" x-webkit-airplay="true" controls="controls"
-                           autoplay="autoplay" name="media">
-                        <source :src="bettingData.live_url">
-                    </video>
-                </section>
-                <section class="betting-stage">
 
-                    <van-tabs v-model="active" @click="onClick" scrollspy line-width="48"
+                <section class="betting-stage" style="height: calc(100% - 164px);">
+
+                    <van-tabs ref="tabs" @change="indexChange" v-model="active" swipeable animated line-width="48"
                               title-active-color="#ffffff" title-inactive-color="rgb(186, 206, 241)"
-                              swipe-threshold="5"
                               background="#0c121f"
                               style="height:100%;">
-                        <vue-Scroll
-                                :ops="scrollOps"
-                                ref="scroller"
-                                @handle-scroll="handleScroll"
-                                @refresh-start="pullRefresh"
-                        >
-                            <div slot="refresh-start">
-                                <div class="refresh-text">
-                                    刷新中...
+
+                        <van-tab v-for="(item,index) in _.groupBy(itemList.odds, 'match_stage')" :key="index"
+                                 :title="matchStage[index]['name']" title-style="font-size: 1.2rem;font-weight:400;">
+                            <section class="betting-odds">
+                                <div class="stage-title">
+                                    <div class="stage-border"></div>
+                                    {{matchStage[index]['name']}}
+                                    <div class="stage-border"></div>
                                 </div>
-
-                            </div>
-                            <div slot="refresh-active">
-                                <div class="refresh-text">下拉刷新</div>
-
-                            </div>
-                            <div slot="refresh-deactive">
-                                <div class="refresh-text">下拉刷新</div>
-                            </div>
-
-                            <van-tab v-for="(item,index) in _.groupBy(bettingData.odds, 'match_stage')"
-                                     :key="index"
-                                     :title="getMatchStage(index)" :ref="getMatchStage(index)"
-                                     title-style="font-size: 1.2rem;font-weight:400;">
-                                <section class="betting-odds">
-                                    <!--                                比赛阶段-->
-                                    <div class="stage-title">
-                                        <div class="stage-border"></div>
-                                        {{getMatchStage(index)}}
-                                        <div class="stage-border"></div>
-                                    </div>
-                                    <template
-                                            v-for="(items,indexs) in _.groupBy(item, 'group_name')"
-                                    >
-
-                                        <!--                                    过滤-->
-                                        <div class="group-list"
-                                             v-if="items.find(value =>
-                                             value =  value.status === oddsStatus['正常']['status'] || value.status === oddsStatus['已封盘']['status'] || value.status === oddsStatus['已结束']['status']
-                                         )"
-                                             :key="indexs">
-                                            <!--                            隐藏该玩法-->
-                                            <odds-group-title :title="getGroupName(indexs)">
-
-                                            </odds-group-title>
-
-                                            <div class="group-odds">
-                                                <match-card-button
-                                                        v-for="(odds,oddsIndex) in _.sortBy(items, o => o.id )"
-                                                        :key="odds.id"
-                                                        :id="odds['id']"
-                                                        :name="odds['name']"
-                                                        :odds="odds['odds']"
-                                                        :status="odds['status']"
-                                                        :win="odds['win']"
-                                                        :direction="oddsIndex"
-
-                                                >
-
-                                                </match-card-button>
-
-                                            </div>
-
-
+                                <div class="group-list" v-for="(items,indexs) in _.groupBy(item, 'group_name')"
+                                     :key="indexs">
+                                    <!--                            隐藏该玩法-->
+                                    <template v-if="_.findIndex(items,{status:oddsStatus['隐藏']['status']}) ===-1">
+                                        <div class="odds-group-title odds-group-title">
+                                            <div class="empty-badge">&nbsp;</div>
+                                            <div class="title">{{groupName(indexs,itemList['team'])}}</div>
                                         </div>
+                                        <div class="group-odds">
+                                            <div class="match-card-button odds-btn"
+                                                 @click.stop="selected(odds)"
+                                                 :class="[
+                                         addClass('btn-selected',odds),
+                                         addClass('btn-locked',odds),
+                                         addClass('btn-over',odds),
+                                         odds['tag'],
+                                     ]"
+                                                 v-for="(odds,oddsIndex) in _.sortBy(items, function(o) { return o.id; })" :key="odds.id">
 
+                                                <div class="button-dark-border">
+                                                    <div class="button-content btn-left" v-if="oddsIndex %2 ===0">
+                                                        <div class="button-name ">
+                                                            {{odds.name}}
+                                                        </div>
+                                                        <div class="button-odds-content"
+                                                             v-if="odds['status'] !==oddsStatus['已结束']['status']">
+                                                            <div class="odds-rising-icon"></div>
+                                                            <div class="odds-dropping-icon"></div>
+                                                            <div class="btn-odds">
+                                                            <span
+                                                                    v-if="odds['status'] !==oddsStatus['已封盘']['status']">
+                                                                {{odds['odds']}}
+                                                            </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flag-icon result-icon"
+                                                             v-if="odds['win']===0 || odds['win']===1"
+                                                             :class="odds['win'] === 1?'flag-win':'flag-lose'">
+                                                            <span>{{winStatus[_.findKey(winStatus,{'win':odds['win']})]['name']}}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="button-content btn-right" v-else>
+                                                        <div class="flag-icon result-icon"
+                                                             v-if="odds['win']===0 || odds['win']===1"
+                                                             :class="odds['win'] === 1?'flag-win':'flag-lose'">
+                                                            <span>{{winStatus[_.findKey(winStatus,{'win':odds['win']})]['name']}}</span>
+                                                        </div>
+                                                        <div class="button-odds-content"
+                                                             v-if="odds['status'] !==oddsStatus['已结束']['status']">
+                                                            <div class="btn-odds">
 
+                                                                <span
+                                                                        v-if="odds['status'] !==oddsStatus['已封盘']['status']">
+                                                                    {{odds['odds']}}
+                                                                </span>
+                                                            </div>
+                                                            <div class="odds-rising-icon"></div>
+                                                            <div class="odds-dropping-icon"></div>
+                                                        </div>
+                                                        <div class="button-name">
+                                                            {{odds.name}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </template>
 
-                                </section>
-                            </van-tab>
-                            <div style="height: 540px;"></div>
-                        </vue-Scroll>
-
+                                </div>
+                            </section>
+                        </van-tab>
 
                     </van-tabs>
 
 
                 </section>
             </div>
-        </transition>
+        </template>
+
 
     </div>
 
@@ -176,9 +170,6 @@
 </template>
 
 <script>
-    import MatchCardButton from '@/components/betting/OddsButton.vue';
-    import OddsGroupTitle from "@/components/others/OddsGroupTitle.vue"
-    import loading from '@/components/loading'
     import {getList} from "@/api/odds";
     import {mapGetters} from "vuex";
 
@@ -193,151 +184,23 @@
                 'matchStatus',
                 'oddsStatus',
                 'winStatus',
-                'isChinese',
+                'betList'
             ])
         },
         data() {
             return {
                 active: 0,
-                activeEvent: false,
-                bettingData: '',
-                showLoading: false,
-                showStream: false,
-                scrollOps: {
-                    vuescroll: {
-                        mode: "slide",
-                        pullRefresh: {
-                            enable: true,
-
-                        },
-                        pushLoad: {
-                            enable: false,
-                            auto: true,
-                            autoLoadDistance: 50
-                        }
-
-                    },
-                    scrollPanel: {
-
-                        scrollingX: false,
-                        scrollingY: true,
-
-                    },
-                    bar: {
-                        disable: true
-                    }
-                }
-
 
             }
         },
         methods: {//条用方法
-            onClick() {
-                const list = document.getElementsByClassName('betting-odds');//所有列表元素
-                let totalHeight = 0;
-                for (let i = 0; i < list.length; i++) {
-                    totalHeight = totalHeight + list[i].offsetHeight; //所有列表元素的总宽度
+            groupName(name,item){
 
-                    if (i === this.active) {
-                        const top = totalHeight - list[this.active].offsetHeight + (this.active * 4)
-                        this.$refs['scroller'].scrollTo({
-                            x: 0,
-                            y: top === 0 ? -1 : top
-                        }, 0)
-
-                        // this.$refs["scroller"].refresh();
-                        break;
-                    }
-                }
+                name = name.replace('$T1', item[this._.findIndex(item,{'pos':1})]['team_name'])
+                name = name.replace('$T2', item[this._.findIndex(item,{'pos':2})]['team_name'])
+                return name
             },
-            handleScroll() {
-
-                const {scrollTop} = this.$refs["scroller"].getPosition();
-                // console.log(scrollTop +'.')
-
-                const list = document.getElementsByClassName('betting-odds');//所有列表元素
-
-                let totalHeight = 0;
-                for (let i = 0; i < list.length; i++) {
-                    totalHeight = totalHeight + list[i].offsetHeight; //所有列表元素的总宽度
-
-                    if (scrollTop - (i * 4) < totalHeight) {
-                        if (this.active !== i) this.active = i
-                        break
-
-                    }
-
-                    // if (i === this.active) {
-                    //     elements[0].scrollTo(0, totalHeight - list[this.active].offsetHeight+i*4)
-                    //     break;
-                    // }
-                }
-
-            },
-            pullRefresh(vm, refreshDom, done) {
-                // console.log(vm, refreshDom, 'pullRefresh');
-                // console.log(vm, refreshDom, 'handleStart',done);
-                this.init().then(() => {
-                    done()
-                }).catch(() => {
-                    console.log('没有任何数据')
-                })
-
-
-            },
-            // scrollTo (n) {
-            //     var e = this;
-            //
-            //     var l =  0
-            //     this.stageList.some(function(t) {
-            //         return t === n ? true :  l += e.getClientHeight(t)
-            //     })
-            //   this.$store.commit("setStageHeight", l)
-            // },
-            // //返回有阶段的列表 返回 全场 第一局。。。。
-            // stageList () {
-            //     return this.oddsList.map(item =>item.match_stage)
-            // },
-            // getClientHeight: function(n) {
-            //     return  this.$refs[n][0].clientHeight + 4
-            // },
-
-
-            matchRound() {
-                return this.bettingData.round.toUpperCase()
-            },
-            //主场团队
-            guestTeam() {
-                return Array.isArray(this.bettingData.team) && this.bettingData.team.find(item => 1 === item.pos)
-            },
-            //客场团队
-            homeTeam() {
-                return Array.isArray(this.bettingData.team) && this.bettingData.team.find(item => 2 === item.pos)
-            },
-
-            getTournamentName() {
-                return this.isChinese ? this.bettingData.tournament_name : this.bettingData.tournament_short_name || this.bettingData.tournament_name
-            },
-            getTeamName(team) {
-                return this.isChinese ? team.team_name : team.team_short_name || team.team_name
-            },
-
-            // getOddsTeam(team) {
-            //     return Array.isArray(this.bettingData.team) && this.bettingData.team.find(item => item.team_id === team.team_id)
-            // },
-            getGroupName(name) {
-                return name.replace("$T1", this.getTeamName(this.guestTeam())).replace("$T2", this.getTeamName(this.homeTeam()))
-            },
-            getMatchStage(stage) {
-
-                return this.isChinese ? this.matchStage[stage].name : stage
-            },
-            getGameIcon() {
-
-                return this.bettingData && this.gameList && this.configList ? this.configList.img_url.value + this.gameList[this.bettingData.game_id].logo : ""
-            },
-
-            getWeek(date) { // 参数时间戳
+            getWeek (date) { // 参数时间戳
                 let week = this.moment(date).day()
                 switch (week) {
                     case 1:
@@ -356,55 +219,73 @@
                         return '周日'
                 }
             },
-            addClass(name) {
+            addClass(name, item) {
 
                 let addOrNot = false
+                if (item) {
+                    switch (name) {
 
-                switch (name) {
-                    case 'status-early'://未开始
-                        addOrNot = this.bettingData.status === this.matchStatus['未开始']['status']
-                        break;
-                    case 'status-live'://滚盘中
-                        addOrNot = this.bettingData.status === this.matchStatus['滚盘中']['status']
-                        break;
-                    case 'status-over'://已结束
-                        addOrNot = this.bettingData.status === this.matchStatus['已结束']['status']
-                        break;
+                        case 'btn-over'://已结算
+                            addOrNot = item['status'] === this.oddsStatus['已结束']['status'];
+                            break;
+                        case 'btn-locked'://已封盘
+                            addOrNot = item['status'] === this.oddsStatus['已封盘']['status'];
+                            break
+                        case 'btn-selected'://投注列表有就选中
+                            addOrNot = this._.findIndex(this.betList, {'id': item.id}) !== -1
+                            break;
+                        case 'status-early'://未开始
+                            addOrNot = item['status'] === this.matchStatus['未开始']['status']
+                            break;
+                        case 'status-live'://滚盘中
+                            addOrNot = item['status'] === this.matchStatus['滚盘中']['status']
+                            break;
+                        case 'status-over'://已结束
+                            addOrNot = item['status'] === this.matchStatus['已结束']['status']
+                            break;
+                    }
                 }
-
                 return {
                     [name]: addOrNot
                 }
             },
             indexChange() {
-                // const elements = document.getElementsByClassName('van-tab__pane-wrapper van-tab__pane-wrapper--inactive')
-                // Array.prototype.forEach.call(elements, function (element) {
-                //     element.scrollTo(0, 0);
-                // });
+                const elements = document.getElementsByClassName('van-tab__pane-wrapper van-tab__pane-wrapper--inactive')
+                Array.prototype.forEach.call(elements, function (element) {
+                    element.scrollTo(0, 0);
+                });
                 // document.getElementsByClassName('van-tab__pane-wrapper van-tab__pane-wrapper--inactive')[0].scrollTo(0,0)
 
             },
+            selected(item) {
 
-            init() {
 
-                return new Promise((resolve, reject) => {
-                    this.showLoading = true
-                    // const index  = this.matchList.findIndex(item => item.id = this.$route.params.matchId)
-                    // if(index !== -1) this.$store.dispatch('match/deleteMatcList', index)
-                    getList({match_id: this.$route.params.matchId}).then(res => {
-                        if (res.data.result) {
-                            this.$store.dispatch('match/setMatcList', [res.data.result])
-                            this.bettingData = Object.assign(this.matchList.find(item => item.id === res.data.result.id))
+                // console.log(this._.findKey(odds,(o) => { return o.team_id = team.id; }));
+                // odds[]
+                if (item) {
+                    if (item['status'] !== this.oddsStatus['已封盘']['status']
+                        && item['status'] !== this.oddsStatus['已结束']['status']) {
+                        const index = this._.findIndex(this.betList, {'id': item.id})
+                        if (index === -1) {
+                            //没有就添加
+                            this.$store.dispatch('app/addBetList', JSON.parse(JSON.stringify(Object.assign(item, {
+                                bet_money: '',
+                                change: false,
+                                keyboard: false,
+                            }))))
                         } else {
-                            this.$toast('没有数据可用')
+                            //有就删除
+                            this.$store.dispatch('app/deleteBetList', index)
                         }
 
-                        this.showLoading = false
-                        resolve()
+                    }
+                }
 
-                    }).catch((error) => {
-                        reject(error)
-                    })
+            },
+            init() {
+
+                getList({match_id: this.$route.params.match_id}).then(res => {
+                    this.$store.dispatch('match/setMatcList', [res.data.result]);
 
 
                 })
@@ -412,10 +293,8 @@
 
             },
 
-
         },
         mounted() {//加载完毕后
-
 
             this.init();
         },
@@ -427,9 +306,6 @@
         updated() {//更新数据
         },
         components: {//注册组件
-            MatchCardButton,
-            OddsGroupTitle,
-            loading
         },
         watch: {
             //data(val, newval) {
@@ -446,15 +322,13 @@
     /*}*/
     .van-tabs__content {
         height: calc(100% - 44px);
-        /*overflow-y: auto;*/
-
 
     }
 
-    /*.van-tab__pane-wrapper {*/
-    /*    height: calc(100%);*/
-    /*    overflow-y: auto;*/
-    /*}*/
+    .van-tab__pane-wrapper {
+        height: calc(100%);
+        overflow-y: auto;
+    }
 
     .van-hairline--top-bottom::after, .van-hairline-unset--top-bottom::after {
         border-width: 0 0;
@@ -474,10 +348,6 @@
     .scroll-list {
         height: calc(100% - 208px);
     }
-
-    /*.__vuescroll{*/
-    /*    background: #182032*/
-    /*}*/
 
     .__refresh .refresh-text {
         font-size: 1.4rem;
@@ -503,7 +373,7 @@
         position: -webkit-sticky;
         position: sticky;
         top: 0;
-        /*z-index: 2;*/
+        z-index: 2;
     }
 
     .betting-page .betting-info .info-title {
@@ -670,65 +540,13 @@
         color: #758bb5;
     }
 
-
-    /*播放器*/
-    .betting-page .live-stream {
-        width: 100%;
-        height: 164px;
-        background: #000;
-        position: -webkit-sticky;
-        position: sticky;
-        top: 0;
-        /*z-index: 3;*/
-    }
-    .betting-page .live-stream .close-stream {
-        background-position: 50%;
-        background-repeat: no-repeat;
-        width: 22px;
-        height: 22px;
-        position: absolute;
-        z-index: 4;
-        right: 0;
-        top: 0;
-        padding: 22px;
-    }
-    .betting-page .live-stream .close-stream .close-stream-icon {
-        background-position: 50%;
-        background-repeat: no-repeat;
-        width: 22px;
-        height: 22px;
-        position: absolute;
-        top: 11px;
-        right: 11px;
-        border-radius: 4.36px;
-        background: #182032;
-        background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMjJweCIgaGVpZ2h0PSIyMnB4IiB2aWV3Qm94PSIwIDAgMjIgMjIiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8IS0tIEdlbmVyYXRvcjogU2tldGNoIDQ5LjMgKDUxMTY3KSAtIGh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaCAtLT4KICAgIDx0aXRsZT7lhbPpl608L3RpdGxlPgogICAgPGRlc2M+Q3JlYXRlZCB3aXRoIFNrZXRjaC48L2Rlc2M+CiAgICA8ZGVmcz48L2RlZnM+CiAgICA8ZyBpZD0i6Zu356ue5oqAMi4wLWNvcHkiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxnIGlkPSJpY29u5YiH5Zu+IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMjU0LjAwMDAwMCwgLTEyNzEuMDAwMDAwKSIgZmlsbD0iI0ZGRkZGRiI+CiAgICAgICAgICAgIDxnIGlkPSLlhbPpl60iIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI1NC4wMDAwMDAsIDEyNzEuMDAwMDAwKSI+CiAgICAgICAgICAgICAgICA8cGF0aCBkPSJNNi43MzY5NzI4NywxNi42NzU5MzA5IEM2LjcxNzQxNzkzLDE2LjY5NzI0MDQgNi42OTY5NTA4MSwxNi43MTc2OTkzIDYuNjc1NjMzMzgsMTYuNzM3MjQ1OCBMNi42NTg2NjA4OSwxNi43NTQyMTE0IEw2LjY1NzcxNDE4LDE2Ljc1MzI4NjIgQzYuNDgxOTAyMDcsMTYuOTA2OTE5MiA2LjI1MTgyMTEzLDE3IDYsMTcgQzUuNDQ3NzE1MjUsMTcgNSwxNi41NTIyODQ3IDUsMTYgQzUsMTUuNzU2NDQ2MyA1LjA4NzA2OTM1LDE1LjUzMzIyODcgNS4yMzE3NzkxNywxNS4zNTk3NzYxIEw1LjIyOTM3MDEyLDE1LjM1NzQyMTkgTDUuMjY2NzY5OTgsMTUuMzIwMDEyOCBDNS4yODM3OTA2MiwxNS4zMDE2NjggNS4zMDE0OTEyNywxNS4yODM5NjMxIDUuMzE5ODMxODQsMTUuMjY2OTM3OSBMOS41ODU3MjI4NCwxMSBMNS4zMTk4MzE4NCw2LjczMzA2MjA1IEM1LjMwMTQ5MTI3LDYuNzE2MDM2OTQgNS4yODM3OTA2Miw2LjY5ODMzMTk1IDUuMjY2NzY5OTgsNi42Nzk5ODcxNyBMNS4yMjkzNzAxMiw2LjY0MjU3ODEyIEw1LjIzMTc3OTE3LDYuNjQwMjIzODUgQzUuMDg3MDY5MzUsNi40NjY3NzEyOSA1LDYuMjQzNTUzNzEgNSw2IEM1LDUuNDQ3NzE1MjUgNS40NDc3MTUyNSw1IDYsNSBDNi4yNTE4MjExMyw1IDYuNDgxOTAyMDcsNS4wOTMwODA4IDYuNjU3NzE0MTgsNS4yNDY3MTM3NiBMNi42NTg2NjA4OSw1LjI0NTc4ODU3IEw2LjY3NTYzMzIsNS4yNjI3NTQwNyBDNi42OTY5NTA4MSw1LjI4MjMwMDY4IDYuNzE3NDE3OTMsNS4zMDI3NTk2IDYuNzM2OTcyODcsNS4zMjQwNjkxMiBMMTEuNzUyNzQ2NiwxMC4zMzc4Mjk2IEwxMS43NTA5Mzk2LDEwLjMzOTYxIEMxMS45MDU5NzA5LDEwLjUxNTc2MDMgMTIsMTAuNzQ2ODk5MyAxMiwxMSBDMTIsMTEuMjUzMTAwNyAxMS45MDU5NzA5LDExLjQ4NDIzOTcgMTEuNzUwOTM5NiwxMS42NjAzOSBMMTEuNzUyNzQ2NiwxMS42NjIxNzA0IEw2LjczNjk3Mjg3LDE2LjY3NTkzMDkgWiIgaWQ9IkNvbWJpbmVkLVNoYXBlIiBmaWxsLW9wYWNpdHk9IjAuNyI+PC9wYXRoPgogICAgICAgICAgICAgICAgPGcgaWQ9IkNvbWJpbmVkLVNoYXBlIiBzdHJva2Utd2lkdGg9IjEiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDExLjAwMDAwMCwgNS4wMDAwMDApIiBmaWxsLW9wYWNpdHk9IjAuNSI+CiAgICAgICAgICAgICAgICAgICAgPHBhdGggZD0iTTYsNy40MTQ2MTQ4NSBMMS43MzY5NzI4NywxMS42NzU5MzA5IEMxLjcxNzQxNzkzLDExLjY5NzI0MDQgMS42OTY5NTA4MSwxMS43MTc2OTkzIDEuNjc1NjMzMzgsMTEuNzM3MjQ1OCBMMS42NTg2NjA4OSwxMS43NTQyMTE0IEwxLjY1NzcxNDE4LDExLjc1MzI4NjIgQzEuNDgxOTAyMDcsMTEuOTA2OTE5MiAxLjI1MTgyMTEzLDEyIDEsMTIgQzAuNDQ3NzE1MjUsMTIgMCwxMS41NTIyODQ3IDAsMTEgQzAsMTAuNzU2NDQ2MyAwLjA4NzA2OTM0OTYsMTAuNTMzMjI4NyAwLjIzMTc3OTE2OCwxMC4zNTk3NzYxIEwwLjIyOTM3MDExNywxMC4zNTc0MjE5IEwwLjI2Njc2OTk4MywxMC4zMjAwMTI4IEMwLjI4Mzc5MDYyMSwxMC4zMDE2NjggMC4zMDE0OTEyNjksMTAuMjgzOTYzMSAwLjMxOTgzMTg0MiwxMC4yNjY5Mzc5IEw0LjU4NTcyMjg0LDYgTDAuMzE5ODMxODQyLDEuNzMzMDYyMDUgQzAuMzAxNDkxMjY5LDEuNzE2MDM2OTQgMC4yODM3OTA2MjEsMS42OTgzMzE5NSAwLjI2Njc2OTk4NSwxLjY3OTk4NzE3IEwwLjIyOTM3MDExNywxLjY0MjU3ODEyIEwwLjIzMTc3OTE2OCwxLjY0MDIyMzg1IEMwLjA4NzA2OTM0OTYsMS40NjY3NzEyOSAwLDEuMjQzNTUzNzEgMCwxIEMwLDAuNDQ3NzE1MjUgMC40NDc3MTUyNSwwIDEsMCBDMS4yNTE4MjExMywwIDEuNDgxOTAyMDcsMC4wOTMwODA4MDA1IDEuNjU3NzE0MTgsMC4yNDY3MTM3NTggTDEuNjU4NjYwODksMC4yNDU3ODg1NzQgTDEuNjc1NjMzMiwwLjI2Mjc1NDA2OSBDMS42OTY5NTA4MSwwLjI4MjMwMDY4MyAxLjcxNzQxNzkzLDAuMzAyNzU5NjAzIDEuNzM2OTcyODcsMC4zMjQwNjkxMjIgTDYsNC41ODUzODUxNSBMNS4yNDcyNTM0Miw1LjMzNzgyOTU5IEw1LjI0OTA2MDM5LDUuMzM5NjA5OTggQzUuMDk0MDI5MTQsNS41MTU3NjAyOSA1LDUuNzQ2ODk5MyA1LDYgQzUsNi4yNTMxMDA3IDUuMDk0MDI5MTQsNi40ODQyMzk3MSA1LjI0OTA2MDM5LDYuNjYwMzkwMDIgTDUuMjQ3MjUzNDIsNi42NjIxNzA0MSBMNiw3LjQxNDYxNDg1IFoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMuMDAwMDAwLCA2LjAwMDAwMCkgc2NhbGUoLTEsIDEpIHRyYW5zbGF0ZSgtMy4wMDAwMDAsIC02LjAwMDAwMCkgIj48L3BhdGg+CiAgICAgICAgICAgICAgICA8L2c+CiAgICAgICAgICAgIDwvZz4KICAgICAgICA8L2c+CiAgICA8L2c+Cjwvc3ZnPg==);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     .betting-page .betting-stage {
-        height: calc(100% - 164px);
         width: 100%;
         background: #0c121f;
         position: -webkit-sticky;
         position: sticky;
         top: 164px;
-        /*z-index: 1;*/
+        z-index: 1;
     }
 
 
@@ -954,20 +772,17 @@
     }
 
     .btn-selected {
-        background: linear-gradient(90deg, #1efffa, #34cdff);
-        box-shadow: 0 1px 4px 0 rgba(0, 128, 255, .3);
+        background: linear-gradient(90deg,#1efffa,#34cdff);
+        box-shadow: 0 1px 4px 0 rgba(0,128,255,.3);
     }
-
     .btn-selected .button-dark-border {
         background: #0585a1;
     }
-
     .btn-selected .button-dark-border .button-content {
         background: #0585a1;
         color: #fff;
         transition: all .3s ease-out;
     }
-
     .btn-odds-rising .btn-odds {
         color: #00dc5e;
     }

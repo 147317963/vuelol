@@ -97,7 +97,7 @@ const routes = [
     {
         //登录
         path: '/login',
-        name:'name',
+        name:'login',
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
@@ -147,7 +147,7 @@ const routes = [
     },
     {   //首页
         path: '/',
-        name:'/',
+        name:'home',
         component: () => import('@/views/home/index.vue'),
         keepAlive: true,//是否刷新页面
         meta: { // 在路由配置中加入meta:{requireAuth: true}
@@ -158,7 +158,7 @@ const routes = [
     },
     {
         //押注
-        path: '/betting/:match_id',
+        path: '/betting/:matchId',
         name:'betting',
         component: () => import("@/views/betting/index.vue"),
         meta: { // 在路由配置中加入meta:{requireAuth: true}
@@ -167,7 +167,7 @@ const routes = [
         }
     },
     {  //赛季
-        path: "/tournament/:tournament_id",
+        path: "/tournament/:tournamentId",
         name:'tournament',
         component: () => import("@/views/tournament/index.vue"),
         meta: { // 在路由配置中加入meta:{requireAuth: true}
@@ -212,9 +212,12 @@ const routes = [
         }
     },
 ]
-
+// const originalPush = VueRouter.prototype.push
+// VueRouter.prototype.push = function push(location) {
+//     return originalPush.call(this, location).catch(err => err)
+// }
 const router = new VueRouter({
-    // mode: 'history',
+    mode: "history",
     routes
 })
 

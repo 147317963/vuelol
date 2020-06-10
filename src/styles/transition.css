@@ -30,7 +30,21 @@
 }
 
 
+/*tab 切换动画*/
 
+
+.match-tab .slide-fade-enter-active {
+    transition: all .5s ease-out
+}
+
+.match-tab .slide-fade-leave-active {
+    transition: all .1s ease-out
+}
+.match-tab .slide-fade-enter,
+.match-tab .slide-fade-leave-to {
+    transform: translateY(15px);
+    opacity: 0
+}
 
 /*慢慢显示动画*/
 .fade-enter-active,

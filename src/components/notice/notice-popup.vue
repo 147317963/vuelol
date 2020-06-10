@@ -1,6 +1,6 @@
 <template>
     <transition mode="out-in" enter-active-class="animated fadeInUp" leave-active-class="animated fadeOutDown">
-        <div class="vux-popup-dialog base-popup vux-popup-bottom vux-popup-show" v-show="noticeShow"
+        <div class="vux-popup-dialog base-popup vux-popup-bottom vux-popup-show" v-show="show"
              style="max-height: 50vh;">
             <div class="base-popup-container">
                 <section class="header">
@@ -30,9 +30,15 @@
 
     export default {
         name: "notice-popup",
+        props:{
+          show:{
+              type:Boolean,
+              default:false,
+          }
+        },
         computed: {
             ...mapGetters([
-                'noticeShow',
+                // 'noticeShow',
                 'announcementList',
             ])
         },

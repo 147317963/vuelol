@@ -1,48 +1,56 @@
 <template>
     <div class="match-tab">
-        <transition mode="out-in" enter-active-class="animated fadeInUp">
-        <section class="filter-matches" v-show="gameMenuShow===false">
-            <div class="vux-tab-wrap match-tab">
-                <div class="vux-tab-container">
-                    <div class="vux-tab">
-                        <div class="vux-tab-item" :style="tabIndex === 0?'border: none; color: rgb(255, 255, 255);':'border: none; color: rgb(186, 206, 241);'"   @click.stop="$store.dispatch('app/setTabIndex',0)">
-                            今日
-                            <span class="match-number">{{today}}</span>
-                        </div>
-                        <span class="column-line"></span>
-                        <div class="vux-tab-item" :style="tabIndex === 1?'border: none; color: rgb(255, 255, 255);':'border: none; color: rgb(186, 206, 241);'" @click.stop="$store.dispatch('app/setTabIndex',1)">
-                            滚盘
-                            <span class="match-number">{{rolling}}</span>
-                        </div>
-                        <span class="column-line"></span>
-                        <div class="vux-tab-item" :style="tabIndex === 2?'border: none; color: rgb(255, 255, 255);':'border: none; color: rgb(186, 206, 241);'" @click.stop="$store.dispatch('app/setTabIndex',2)" >
-                            赛前
-                            <span class="match-number">58</span>
-                        </div>
-                        <span class="column-line"></span>
-                        <div class="vux-tab-item" :style="tabIndex === 3?'border: none; color: rgb(255, 255, 255);':'border: none; color: rgb(186, 206, 241);'" @click.stop="$store.dispatch('app/setTabIndex',3)">
-                            已结束
-                        </div>
-                        <span class="column-line"></span>
-                        <div  class="vux-tab-ink-bar vux-tab-ink-bar-transition-forward"
-                              :style="'display: block; height: 22px; background-color: transparent; left: '+left+'%; right: '+right+'%'"
-                             >
-<!--                            :style="'display: block; height: 22px; background-color: transparent; left: '+left+'%; right: '+right+'%'"-->
+        <transition name="slide-fade">
+            <section class="filter-matches" v-show="!gamePickerVisibility">
+                <div class="vux-tab-wrap match-tab">
+                    <div class="vux-tab-container">
+                        <div class="vux-tab">
+                            <div class="vux-tab-item"
+                                 :style="homeMatchType === 2?'border: none; color: rgb(255, 255, 255);':'border: none; color: rgb(186, 206, 241);'"
+                                 @click.stop="$store.dispatch('match/setHomeMatchType',2)">
+                                今日
+                                <span class="match-number">{{today}}</span>
+                            </div>
+                            <span class="column-line"></span>
+                            <div class="vux-tab-item"
+                                 :style="homeMatchType === 1?'border: none; color: rgb(255, 255, 255);':'border: none; color: rgb(186, 206, 241);'"
+                                 @click.stop="$store.dispatch('match/setHomeMatchType',1)">
+                                滚盘
+                                <span class="match-number">{{rolling}}</span>
+                            </div>
+                            <span class="column-line"></span>
+                            <div class="vux-tab-item"
+                                 :style="homeMatchType === 3?'border: none; color: rgb(255, 255, 255);':'border: none; color: rgb(186, 206, 241);'"
+                                 @click.stop="$store.dispatch('match/setHomeMatchType',3)">
+                                赛前
+                                <span class="match-number">58</span>
+                            </div>
+                            <span class="column-line"></span>
+                            <div class="vux-tab-item"
+                                 :style="homeMatchType === 4?'border: none; color: rgb(255, 255, 255);':'border: none; color: rgb(186, 206, 241);'"
+                                 @click.stop="$store.dispatch('match/setHomeMatchType',4)">
+                                已结束
+                            </div>
+                            <span class="column-line"></span>
+                            <div class="vux-tab-ink-bar vux-tab-ink-bar-transition-forward"
+                                 :style="'display: block; height: 22px; background-color: transparent; left: '+left+'%; right: '+right+'%'"
+                            >
+                                <!--                            :style="'display: block; height: 22px; background-color: transparent; left: '+left+'%; right: '+right+'%'"-->
+                            </div>
                         </div>
                     </div>
+                    <!--                <div class="vux-tab-ink-bar vux-tab-ink-bar-transition-forward" style="display: block; height: 22px; background-color: transparent; left: 50%; right: 25%;">&lt;!&ndash;&ndash;&gt;</div>-->
                 </div>
-                <!--                <div class="vux-tab-ink-bar vux-tab-ink-bar-transition-forward" style="display: block; height: 22px; background-color: transparent; left: 50%; right: 25%;">&lt;!&ndash;&ndash;&gt;</div>-->
-            </div>
-            <div class="show-filter-games-btn" @click.stop="$store.dispatch('app/setGameMenuShow',true)"></div>
-        </section>
+                <div class="show-filter-games-btn" @click.stop="gamePickerVisibility = !gamePickerVisibility"></div>
+            </section>
         </transition>
-        <transition mode="out-in" enter-active-class="animated fadeInUp">
-            <section class="filter-games" v-show="gameMenuShow===true">
+        <transition name="slide-fade">
+            <section class="filter-games" v-show="gamePickerVisibility">
                 <div class="hide-filter-games-btn" style="visibility: hidden;">&nbsp;&nbsp;
                 </div>
                 <div>游戏筛选</div>
                 <div class="hide-filter-games-btn">
-                    <div class="btn-content" @click.stop="$store.dispatch('app/setGameMenuShow',false)">✓</div>
+                    <div class="btn-content" @click.stop="gamePickerVisibility = !gamePickerVisibility">✓</div>
                 </div>
             </section>
         </transition>
@@ -55,28 +63,58 @@
 <script>
     // import _ from 'lodash';
     import {mapGetters} from "vuex";
+
     export default {
         name: "match-tab",
         computed: {
             ...mapGetters([
-                'gameMenuShow',
-                'tabIndex',
+                'homeMatchType',
                 'matchList',
-            ])
+            ]),
+            gamePickerVisibility: {
+                get() {
+                    return  this.$store.getters.gamePickerVisibility
+                },
+                set(value) {
+                    this.$store.dispatch("game/toggleGamePickerVisibility", value)
+                }
+            }
         },
         data() {
             return {
-                left:0,
-                right:75,
-                today:0,
-                rolling:0,
-                list:['今日','滚盘','赛前','已结束']
+                left: 0,
+                right: 75,
+                today: 0,
+                rolling: 0,
+                list: ['今日', '滚盘', '赛前', '已结束'],
 
-
+                matchTypeList: [
+                    {
+                        type: "today",
+                        value: 2
+                    }, {
+                        type: "live",
+                        value: 1
+                    }, {
+                        type: "early",
+                        value: 3
+                    }, {
+                        type: "results",
+                        value: 4
+                    }
+                ]
 
             }
         },
         methods: {//条用方法
+            // getMatchCount: function(n) {
+            //
+            //     var e = this.selectedGameList.length ?  this.selectedGameList : this.gameList;
+            //     return  e.reduce(function(e, l) {
+            //         return  Number(e) + Number(l[n])
+            //     })
+            // },
+
             // onItemClick(keyword, index) {
             //     console.log('on item click:', index)
             //     let barLeft = 0;
@@ -113,29 +151,29 @@
         watch: {
             'matchList'(newValue) {
 
-                    this.today =0;
-                    this.rolling=0;
-                   Object.values(newValue).forEach((itme) => {
-                        if(itme['status']===1 || itme['status']===2){
-                            this.today++;
-                        }
-                        if(itme['status']===2){
-                            this.rolling++;
-                        }
-                    });
+                this.today = 0;
+                this.rolling = 0;
+                Object.values(newValue).forEach((itme) => {
+                    if (itme['status'] === 1 || itme['status'] === 2) {
+                        this.today++;
+                    }
+                    if (itme['status'] === 2) {
+                        this.rolling++;
+                    }
+                });
 
             },
-            'tabIndex'(newValue){
-                if(newValue===0){
+            'homeMatchType'(newValue) {
+                if (newValue === 0) {
                     this.left = 0;
                     this.right = 75;
-                }else if(newValue===1){
+                } else if (newValue === 1) {
                     this.left = 25;
                     this.right = 50;
-                }else if(newValue===2){
+                } else if (newValue === 3) {
                     this.left = 50;
                     this.right = 25;
-                }else if(newValue===3){
+                } else if (newValue === 4) {
                     this.left = 75;
                     this.right = 0;
                 }
@@ -279,7 +317,6 @@
     }
 
 
-
     /*游戏列表*/
 
     .match-tab .filter-games {
@@ -296,6 +333,7 @@
         background-color: #090c15;
         font-size: 1.3rem;
     }
+
     .match-tab .filter-games .hide-filter-games-btn .btn-content, .match-tab .filter-games .hide-filter-games-btn {
         border-radius: 2px;
         display: -ms-flexbox;
@@ -305,10 +343,11 @@
         -ms-flex-align: center;
         align-items: center;
     }
+
     .match-tab .filter-games .hide-filter-games-btn {
         width: 48px;
         height: 20.001px;
-        background: linear-gradient(90deg,#0689f3,#019bbd);
+        background: linear-gradient(90deg, #0689f3, #019bbd);
     }
 
 
@@ -318,6 +357,7 @@
         background: #151b29;
         color: #1ee8e7;
     }
+
     .match-tab .vux-tab-ink-bar:after {
         content: " ";
         width: 26px;

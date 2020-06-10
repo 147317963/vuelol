@@ -1,12 +1,12 @@
 const state = {
-
-    gameMenuShow: false,//游戏菜单列表
+    isChinese:true,//中文
     matchRefresh: false,//刷新比赛列表
     gameMenuRefresh: false,//刷新游戏菜单列表
     tabIndex: 0,//TAB菜单选中,
     betSlipPop: false,//弹出投注框
     betSlipPopBodyShow: false,//弹出投注详细信息
     noticeShow: false,//通知显示
+    datePickerShow:false,//选择日期显示
     overlayShow: false,//遮罩层
     winStatus: {
         '正常': {
@@ -20,6 +20,7 @@ const state = {
         '胜': {
             win: 1,
             name: '胜'
+
         }
     },
     matchStatus: {
@@ -53,12 +54,17 @@ const state = {
         '已结束': {
             status: 5,
             name: '已结束'
+        },
+        '未知': {
+            status: 99,
+            name: '未知'
         }
     },//赔率状态
     matchStage: {
         'map1': {
             match_stage: 'map1',
-            name: '地图一'
+            name: '地图一',
+
         },
         'map2': {
             match_stage: 'map2',
@@ -168,12 +174,53 @@ const state = {
             match_stage:'q9',
             name: '第九节'
         },
+        s1: {
+            match_stage:'s1',
+            name:"第一盘"
+        },
+        s2: {
+            match_stage:'s2',
+            name:"第二盘"
+        },
+        s3: {
+            match_stage:'s3',
+            name:"第三盘"
+        },
+        s4: {
+            match_stage:'s4',
+            name:"第四盘"
+        },
+        s5: {
+            match_stage:'s5',
+            name:"第五盘"
+        },
+        s6: {
+            match_stage:'s6',
+            name:"第六盘"
+        },
+        s7: {
+            match_stage:'s7',
+            name:"第七盘"
+        },
+        s8: {
+            match_stage:'s8',
+            name:"第八盘"
+        },
+        s9: {
+            match_stage:'s9',
+            name:"第九盘"
+        },
         '1st':{
             match_stage:'1st',
             name: '上半场'
+        },
+        'h2':{
+            match_stage:'h2',
+            name: '下半场'
         }
     },//比赛阶段
     betList:[],//投注列表
+
 
 }
 
@@ -184,8 +231,12 @@ const mutations = {
     SET_NOTICE_SHOW: (state, show) => {
         state.noticeShow = show;
     },
-    SET_GAME_MENU_SHOW: (state, show) => {
-        state.gameMenuShow = show;
+    SET_DATE_PICKER_SHOW: (state, show) => {
+        state.datePickerShow = show;
+    },
+
+    SET_GAME_PICKER_VISIBILITY: (state, show) => {
+        state.gamePickerVisibility = show;
     },
     SET_MATCH_REFRESH: (state, show) => {
         state.matchRefresh = show;
@@ -221,12 +272,14 @@ const actions = {
     setOverlayShow({commit}, show) {
         commit('SET_OVERLAY_SHOW', show)
     },
+    setDatePickerShow({commit}, show) {
+        commit('SET_OVERLAY_SHOW', show)
+    },
     setNoticeShow({commit}, show) {
         commit('SET_NOTICE_SHOW', show)
     },
-    setGameMenuShow({commit}, show) {
-        commit('SET_GAME_MENU_SHOW', show)
-    },
+
+
     setMatchRefresh({commit}, show) {
         commit('SET_MATCH_REFRESH', show);
     },
@@ -254,7 +307,11 @@ const actions = {
     deleteBetList({commit}, index) {
         commit('DELETE_BET_LIST', index);
     },
-
+    // addToCart: function(n, e) {
+    //     n.shoppingCart.length ? '' : n.showCartDetail = true
+    //     let l = JSON.parse(e)
+    //     Object.prototype.hasOwnProperty.call(l, "oldOdds") ?  l.oldOdds = l.odds :  1 === n.shoppingCart.length &&  n.showCartDetail ?  n.showCartDetail = false :  n.shoppingCart.push(l)
+    // },
 }
 export default {
     namespaced: true,

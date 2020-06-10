@@ -9,69 +9,60 @@ export default {
             'betList',
         ])
     },
+    data() {
+        return {
+            oddsRisingTime:'',
+            oddsDroppingTime:'',
+        }
+    },
 
-    mounted() {
+     mounted() {
+         // this.sockets.subscribe('match', data => {
+         //     console.log('welcome data ', data)
+         // })
 
-
-        (async () => {
-
+         (async () => {
             // Subscribe to a channel.
-            let sub1 = this.socket.subscribe( "match");
+           let sub = this.socket.subscribe( "match")
             // let data = await this.socket.receiver('#publish').once()
-            for await (let data of sub1) {
+
+            for await (let data of sub) {
                 // ...
                 if(data['source'] ==='odds'){
                     data['odds'].forEach(item => {
                         if(this.oddsList[item['id']]){
-                            console.log(item)
-                            const oldOdds =  parseFloat(this.oddsList[item['id']]['odds'])
-                            const newOdds =  parseFloat(item['odds'])
-                            if (oldOdds > newOdds &&  item['status'] === this.oddsStatus['正常']['status']) {
-
-                                    this.oddsList[item['id']]['tag'] = 'btn-odds-dropping';
-
-
-
-                            } else if (oldOdds < newOdds &&  item['status'] === this.oddsStatus['正常']['status']) {
-
-
-                                    this.oddsList[item['id']]['tag'] = 'btn-odds-rising';
-
-
-                            }
-                            setTimeout(() => {
-                                this.oddsList[item['id']]['tag'] = ''
-                            }, 6000);
-                         // let  throttled =  this._.debounce(()=>{
-                         //        this.oddsList[item['id']]['tag'] = ''
-                         //    }, 6000, { 'maxWait': 6000,'trailing': true });
-                         //    throttled()
-                            const index = this._.findIndex(this.betList, {id: item['id']});
-
-                            if(index !== -1){
-                                const list={
-                                    index:index,
-                                    data:JSON.parse(JSON.stringify(Object.assign(this.betList[index],item, {
-                                        change: true,
-                                    })))
-                                }
-                                this.$store.dispatch('app/updateBetList', list)
-
-                            }
-                            this.oddsList[item['id']] = Object.assign(this.oddsList[item['id']],item)
+                            Object.assign(this.oddsList[item['id']],item)
                         }
                     })
                 }else if(data['source'] ==='match'){
 
+                        const index = this.matchList.findIndex(item=>item.id === data['match']['id']);
+                        if(index !== -1){
+                            this.$store.dispatch("match/updateMatcList", {
+                                'index':index,
+                                'data':Object.assign(this.matchList[index],data['match'])
+                            })
+
+                        }
+                    console.log(data)
+
                 }
+
+                this.$socket.emit('matchupdate', data)
 
             }
 
 
+
+
+
         })();
-         this.$store.dispatch('announcement/getAnnouncementList')
-         this.$store.dispatch('game/getGameList')
-         this.$store.dispatch('config/getConfigList')
+
+              this.$store.dispatch('announcement/getAnnouncementList')
+
+              this.$store.dispatch('game/getGameList')
+              this.$store.dispatch('config/getConfigList')
+
 
     },
 

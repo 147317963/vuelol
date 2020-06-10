@@ -1,6 +1,6 @@
 <template>
 
-    <div v-if="betList.length >0 && ($route.name === '/' ||  $route.name === 'betting' || $route.name === 'tournament') ">
+    <div v-if="betList.length >0 && ($route.name === 'home' ||  $route.name === 'betting' || $route.name === 'tournament') ">
         <transition mode="out-in" enter-active-class="animated fadeInUp" leave-active-class="animated fadeOutDown">
             <!--            <transition mode="out-in" enter-active-class="animated fadeInUp" leave-active-class="animated fadeOutDown">-->
             <div class="vux-popup-dialog bet-slip-pop vux-popup-bottom vux-popup-show"

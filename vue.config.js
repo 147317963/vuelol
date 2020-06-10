@@ -17,13 +17,19 @@ module.exports = {
                 //     '^/' : ''
                 // }
             },
-            '/': {
+            '/v1/': {
                 target: `http://www.llgj.com/`,
                 changeOrigin: true,
                 // pathRewrite: {
                 //     '^/' : ''
                 // }
-            }
+            },
+            // '/socketcluster': {
+            //     target: `https://cfsocket.raybet.ai/`, // target host
+            //     // ws:true,
+            //     changeOrigin: true, // needed for virtual hosted sites
+            //     // logLevel: 'debug'
+            // }
         }
     },
     //configureWebpack 是Vue CLI3.0 中用于配置 webpack 插件参数的地方，你在这里设置，会新建或者覆盖 webpack 默认配置。

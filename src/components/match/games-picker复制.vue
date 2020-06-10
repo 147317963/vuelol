@@ -42,7 +42,7 @@
     import { mapGetters } from 'vuex'
 
     export default {
-        name: "games-picker",
+        name: "game-picker",
 
         components: {//注册组件
             BetterScroll,

@@ -40,12 +40,12 @@
                                                maxlength="6"> <label
                         for="验证码" class="input-label">验证码
                 </label> <span class="focus-border"></span> <!---->  <!----></div>
-                <div class="base-input"><input id="推荐码" type="text"
+                <div class="base-input"><input id="推荐码" type="text" v-model="registerForm.inviteCode"
                                                placeholder="填写推荐码（选填）"
                                                autocomplete="off" autocorrect="off"
                                                autocapitalize="off"> <label
                         for="推荐码" class="input-label">推荐码
-                </label> <span class="focus-border"></span> <!---->  <!----></div>
+                </label> <span class="focus-border"></span> </div>
                 <div style="height: 26px;"></div>
                 <div class="base-button button--disabled">
                     <div class="button-border">
@@ -64,8 +64,16 @@
         name: "register",
         data() {
             return {
+                registerForm:{
+                    username:'',
+                    password:'',
+                    checked:false,
+                    inviteCode:localStorage.getItem('invite_code')
+                },
+
 
             }
+
         },
         methods: {//条用方法
         },

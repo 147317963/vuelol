@@ -17,16 +17,19 @@ import socketClusterClient from "socketcluster-client"
 import VueSocketCluster from 'vue-socket-cluster';
 import VueSocketIO from "vue-socket.io";
 import '@/styles/index.css';
+import utils from '@/utils'
 
 
 
 Vue.config.productionTip = false;
 Vue.prototype.moment= moment;
 Vue.prototype._=_;
+Vue.prototype.$utils = utils;
 Vue.prototype.socket = socketClusterClient.create({
-  hostname: 'cfsocket.raybet.ai',
+  hostname: '//cfsocket.raybet.ai',
   secure: true,
   port: 443,
+  // autoConnect:true,
   // rejectUnauthorized: false // Only necessary during debug if using a self-signed certificate
 })
 
@@ -49,15 +52,34 @@ Vue.use(VueLazyload, {
 })
 
 
-// Vue.use(new VueSocketIO({
-//   debug: process.env.NODE_ENV == 'development'?true:false,
-//   connection: 'http://192.168.8.107:9501',
-// }));
+Vue.use(new VueSocketIO({
+  debug: process.env.NODE_ENV == 'development'?true:false,
+  connection: '192.168.8.107:9501',
+  // options: { path: "/socketcluster/" } //Optional options
+}));
 
 
 
 
 new Vue({
+  // sockets: {
+  //   connecting() {
+  //     console.log('正在连接')
+  //   },
+  //   disconnect() {
+  //     console.log("Socket 断开");
+  //   },
+  //   connect_failed() {
+  //     cosnole.log('连接失败')
+  //   },
+  //   connect() {
+  //     console.log('socket connected')
+  //
+  //       // this.$socket.emit('hello', '这里是客户端')
+  //
+  //
+  //   }
+  // },
   router,
   store,//挂载一下前面定义的store
   render: h => h(App)
