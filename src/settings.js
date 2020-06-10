@@ -37,10 +37,11 @@ module.exports = {
    * @type {string }
    * @description储存token名称。
    */
-  tokenName:'user_token'
+  tokenName:'user_token',
   /**
    *
    */
-
+  //邀请人
+  inviteCode:'invite_code',
 
 }

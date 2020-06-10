@@ -8,9 +8,10 @@ const state = {
 }
 const mutations = {
     SET_ANNOUNCEMENT_LIST: (state, list) => {
-        let listNew=[];
+        let listNew={};
         for(let i  in list){
-            listNew.push(list[i]) //值 ['aaa' 190 'man']
+            // listNew.push(list[i]) //值 ['aaa' 190 'man']
+            listNew[list[i]['id']] = Object.assign(list[i])
 
         }
         state.announcementList = listNew;

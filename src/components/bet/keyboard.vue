@@ -118,7 +118,7 @@
     }
 
     .bet-keyboard .content__btn--delete .delete-icon {
-        background-image: url("../../assets/images/svg/qingchu.svg");
+        background-image: url("~@/assets/images/svg/qingchu.svg");
         background-size: cover;
         background-position: 50%;
         background-repeat: no-repeat;

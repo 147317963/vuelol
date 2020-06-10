@@ -24,12 +24,15 @@ service.interceptors.request.use(
             // config.headers.common['Authorization'] = localStorage.token;  //将token设置成请求头A
             config.headers['Authorization'] = store.getters.token;  //将token设置成请求头A
         }
-        if(config.method==='post'){
-             Toast.loading({
-                message: '加载中...',
-                overlay:true
-            });
-        }
+        // config.headers['Origin'] = 'https://www.ray51.com';
+        // config.headers[':authority'] = 'esportsgamelink.com';
+        // console.log(config);
+        // if(config.method==='post'){
+        //      Toast.loading({
+        //         message: '加载中...',
+        //         overlay:true
+        //     });
+        // }
         return config;
     },
     error => {
@@ -41,9 +44,9 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
     response => {
-        if(response.config.method==='post'){
-            Toast.clear();
-        }
+        // if(response.config.method==='post'){
+        //     Toast.clear();
+        // }
         if (response.data.code!==200) {
             Toast({
                 message: response.data.message,

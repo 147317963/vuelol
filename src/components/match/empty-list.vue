@@ -1,22 +1,25 @@
 <template>
-    <div class="empty-list" v-show="show">
+    <div class="empty-list" >
         选手正在赛前准备，请耐心等候...
-        <div class="base-button empty-btn button--dark">
+        <div class="base-button empty-btn button--dark" v-show="tabIndex !==3">
             <div class="button-border">
-                <button type="submit" class="button-content">去参加赛前竞猜</button>
+                <button type="submit" class="button-content" @click.stop="$store.dispatch('app/setTabIndex',2)">去参加赛前竞猜</button>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+    import {mapGetters} from "vuex";
+
     export default {
         name: "empty-list",
-        props: {
-            show:{
-                type: Boolean,
-                default: false
-            }
+        computed: {
+            ...mapGetters([
+                'gameList',
+                'matchList',
+                'tabIndex'
+            ])
         },
         data() {
             return {}

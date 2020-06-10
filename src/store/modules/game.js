@@ -2,19 +2,19 @@ import { getList } from '@/api/game'
 
 
 const state = {
-    gameList:[],
+    gameList:{},
 
 
 }
 const mutations = {
     SET_GAME_LIST: (state, list) => {
-        let listNew=[];
-        for(let i  in list){
+        let listNew={};
+        // listNew.push( {selected:true})
+        Object.values(list).forEach(item => {
+            listNew[item['id']] = Object.assign(item, {selected:true})
+        })
 
-            if(!Object.prototype.hasOwnProperty.call(list[i],'selected')){
-                listNew.push(Object.assign(list[i], {selected:true}))
-            }
-        }
+
         state.gameList = listNew;
     },
     UPDATE_GAME_LIST:(state, list) => {

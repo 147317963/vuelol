@@ -1,11 +1,15 @@
 import { getList } from '@/api/config'
 const state = {
-    configList:[],
+    configList:{},
 }
 const mutations = {
     SET_CONFIG_LIST: (state, list) => {
+        let listNew={};
+        Object.values(list).forEach(item => {
+            listNew[item['name']] = Object.assign(item)
+        })
 
-        state.configList = list;
+        state.configList = listNew;
 
     },
 

@@ -1,6 +1,6 @@
 <template>
-    <div  style="height: 100%; width: 100%; padding: 0px; position: relative;overflow: hidden" ref="scroll" >
-        <div class="">
+    <div  class="container"  ref="scroll" >
+        <div>
             <slot></slot><!--分发内容-->
         </div>
 
@@ -59,9 +59,12 @@
             }
         },
         mounted() {
-            setTimeout(() => {
-                this._initScroll()
-            }, this.refreshDelay)
+            this.$nextTick(() => {
+                setTimeout(() => {
+                    this._initScroll()
+                }, this.refreshDelay)
+            })
+
         },
         methods: {
             _initScroll() {
@@ -77,16 +80,18 @@
                 this.scroll = new BScroll(this.$refs.scroll, {
                     probeType: this.probeType,
                     click: this.click,
-                    tap: true,
-                    // swipeBounceTime: this.swipeBounceTime,
-                    // bounceTime: this.bounceTime,
-                    // momentumLimitTime: this.momentumLimitTime,
+                    preventDefaultException:{tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT|DIV)$/},
+                    taps: true,
+                    swipeBounceTime: this.swipeBounceTime,
+                    bounceTime: this.bounceTime,
+                    momentumLimitTime: this.momentumLimitTime,
                     scrollY: true,
                     scrollX: false,
                     // startY: this.startY,
                     mouseWheel: this.mouse,
                     pullUpLoad: this.pullUp,
                     pullDownRefresh: this.pullDown,
+                    useTransition:true,
                     scrollbar: {
                         fade: true,
                         interactive: false // 1.8.0 新增  移动端必须要有滚动条不然会回弹两次
@@ -143,5 +148,17 @@
 </script>
 
 <style scoped lang="less" rel="stylesheet/less">
-
+    .container {
+        height: 100%;
+        width: 100%;
+        padding: 0px;
+        position: relative;
+        overflow: hidden;
+        -webkit-overflow-scrolling : touch;  /* liuhx:可以把这整行注释掉对比差别 */
+    }
+    /*.main-inner {*/
+    /*    position: absolute;*/
+    /*    width: 100%;*/
+    /*    height: calc(100% + 1px)*/
+    /*}*/
 </style>
