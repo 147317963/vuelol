@@ -73,6 +73,7 @@
         },
         methods: {//条用方法
             getGameIcon(logo){
+                console.log(123);
                return  Object.keys(this.configList).length ? this.configList['img_url']['value']+logo:''
             },
             showAllGames() {
